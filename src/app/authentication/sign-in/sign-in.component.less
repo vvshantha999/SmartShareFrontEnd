@@ -1,4 +1,4 @@
-@signInBackgroundImage:url('http://getwallpapers.com/wallpaper/full/a/5/d/544750.jpg');
+@signInBackgroundImage:url('src/assets/images/authentication-background.jpg');
 
 .custom-background{
   background-image:@signInBackgroundImage;
@@ -8,9 +8,13 @@
   height:100%;
   min-height:100%;
 }
-
-a:hover{
-  text-decoration: none;
+.register-link{
+  color:deepskyblue;
+  cursor: pointer;
+  &:hover{
+    color: dodgerblue;
+    font-weight: bold;
+  }
 }
 
 em{
@@ -18,4 +22,18 @@ em{
   float: right;
 }
 
+.card{
+  opacity: 0.95;
+  background-color: rgba(0,0,0,0.5) !important;
+  color: white;
+  font-family: 'Numans', sans-serif;
+}
+.input-group-text{
+  background-color: #fec310;
+  border: 1px solid #fec310;
+  color: black;
+}
 
+.is-invalid{
+  border: 2px solid red;
+}

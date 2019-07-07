@@ -8,52 +8,57 @@
           <h3>Sign In</h3>
         </div>
         <div class="card-body">
-          <form #signinForm ="ngForm" autocomplete="off" (ngSubmit)="signIn(signinForm)" novalidate>
+          <form #signinForm="ngForm" autocomplete="off" (ngSubmit)="signIn(signinForm.value)" novalidate>
             <div class="form-group">
               <label for="userNameOrEmail">Username or email address</label>
-              <em *ngIf="signinForm.controls.userNameOrEmail?.invalid && (signinForm.controls.userNameOrEmail?.touched || mouseoverSubmit == true)">Required</em>
+              <em
+                *ngIf="signinForm.controls.userNameOrEmail?.invalid && (signinForm.controls.userNameOrEmail?.touched || mouseoverSubmit == true)">Required</em>
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                  <span class="input-group-text">
+                  <span class="input-group-text btn-warning">
                     <fa-icon [icon]="['fas', 'user']"></fa-icon>
                   </span>
                 </div>
-                <input type="text" class="form-control" id="userNameOrEmail" name="userNameOrEmail" placeholder="Enter username or email" [ngModel] required maxlength="30"
-                [ngClass]="{'is-invalid': signinForm.controls.userNameOrEmail?.invalid && (signinForm.controls.userNameOrEmail?.touched || mouseoverSubmit == true)}">
+                <input type="text" class="form-control" id="userNameOrEmail" name="userNameOrEmail"
+                       placeholder="Enter username or email" [ngModel] required maxlength="30"
+                       [ngClass]="{'is-invalid': signinForm.controls.userNameOrEmail?.invalid && (signinForm.controls.userNameOrEmail?.touched || mouseoverSubmit == true)}">
               </div>
             </div>
+
             <div class="form-group">
               <label for="password">Password</label>
-              <em *ngIf="signinForm.controls.password?.invalid && (signinForm.controls.password?.touched || mouseoverSubmit == true) && signinForm.controls.password?.errors.required">Required</em>
-              <em *ngIf=" signinForm.controls.password?.invalid  && (signinForm.controls.password?.dirty || mouseoverSubmit == true) && (!signinForm.controls.password?.errors.required && signinForm.controls.password?.errors.minlength?.actualLength < 8)"> password > 8 characters </em>
+              <em
+                *ngIf="signinForm.controls.password?.invalid && (signinForm.controls.password?.touched || mouseoverSubmit == true) && signinForm.controls.password?.errors.required">Required</em>
+              <em
+                *ngIf=" signinForm.controls.password?.invalid  && (signinForm.controls.password?.dirty || mouseoverSubmit == true) && (!signinForm.controls.password?.errors.required && signinForm.controls.password?.errors.minlength?.actualLength < 8)">
+                password > 8 characters </em>
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                  <span class="input-group-text">
+                  <span class="input-group-text btn-warning">
                     <fa-icon [icon]="['fas', 'key']"></fa-icon>
                   </span>
                 </div>
-                <input type="password" class="form-control is-invalid" id="password" name = "password" placeholder="Password" [ngModel]  required minlength="8" maxlength="30"
+                <input type="password" class="form-control is-invalid" id="password" name="password"
+                       placeholder="Password" [ngModel] required minlength="8" maxlength="30"
                        [ngClass]="{'is-invalid': signinForm.controls.password?.invalid && (signinForm.controls.password?.touched || mouseoverSubmit == true)}">
               </div>
-
-
             </div>
             <div class="form-group">
               <span (mouseenter)="mouseoverSubmit = true" (mouseleave)="mouseoverSubmit=false">
-              <button type="submit"  [disabled]="signinForm.invalid" class="btn btn-primary float-right" >Submit</button>
+              <button type="submit" [disabled]="signinForm.invalid" class="btn btn-warning float-right">Submit</button>
               </span>
             </div>
           </form>
 
         </div>
         <div class="card-footer">
-          <div class="d-flex justify-content-center links">
-            Don't have an account?<span [routerLink]="/signup"]> &nbsp; Register</span>
+          <div class="d-flex justify-content-center">
+            Don't have an account?<span class="register-link" [routerLink]="['/signup']"> &nbsp; Register</span>
           </div>
+        </div>
       </div>
+      <div class="col-4"></div>
     </div>
-    <div class="col-4"></div>
+    <div class="row"></div>
   </div>
-  <div class="row"></div>
-</div>
 </div>

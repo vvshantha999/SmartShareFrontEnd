@@ -1,0 +1,111 @@
+<div class="container-fluid custom-background">
+  <div class="row h-15"></div>
+  <div class="row">
+    <div class="col-4"></div>
+    <div class="col-4">
+      <div class="card">
+        <div class="card-header">
+          <h3>Sign Up</h3>
+        </div>
+        <div class="card-body">
+          <form #signupForm="ngForm" (ngSubmit)="signUp(signupForm)" autocomplete="off" novalidate>
+            <div class="form-group">
+              <label for="userName">Username</label>
+              <em
+                *ngIf="signupForm.controls.userName?.invalid && (signupForm.controls.userName?.touched || mouseoverSubmit == true)">Required</em>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text btn-warning">
+                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                  </span>
+                </div>
+                <input
+                  [ngClass]="{'is-invalid': signupForm.controls.userName?.invalid && (signupForm.controls.userName?.touched || mouseoverSubmit == true)}"
+                  [ngModel] class="form-control" id="userName"
+                  maxlength="30" name="userName" placeholder="Username" required
+                  type="text">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="emailAddress">Email</label>
+              <em
+                *ngIf="signupForm.controls.emailAddress?.invalid && (signupForm.controls.emailAddress?.touched || mouseoverSubmit == true)">Required</em>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text btn-warning">
+                    <fa-icon [icon]="['fas', 'at']"></fa-icon>
+                  </span>
+                </div>
+                <input
+                  [ngClass]="{'is-invalid': signupForm.controls.emailAddress?.invalid && (signupForm.controls.emailAddress?.touched || mouseoverSubmit == true)}"
+                  [ngModel] class="form-control" email="" id="emailAddress"
+                  maxlength="30" name="emailAddress" placeholder="Email" required
+                  type="email">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+              <em
+                *ngIf="signupForm.controls.password?.invalid && (signupForm.controls.password?.touched || mouseoverSubmit == true) && signupForm.controls.password?.errors.required">Required</em>
+              <em
+                *ngIf=" signupForm.controls.password?.invalid  && (signupForm.controls.password?.dirty || mouseoverSubmit == true) && (!signupForm.controls.password?.errors.required && signupForm.controls.password?.errors.minlength?.actualLength < 8)">
+                password > 8 characters </em>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text btn-warning">
+                    <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                  </span>
+                </div>
+                <input
+                  [ngClass]="{'is-invalid': signupForm.controls.password?.invalid && (signupForm.controls.password?.touched || mouseoverSubmit == true)}"
+                  [ngModel] class="form-control is-invalid" id="password"
+                  maxlength="30" minlength="8" name="password" placeholder="Password" required
+                  type="password">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <em
+                *ngIf="signupForm.controls.confirmPassword?.invalid && (signupForm.controls.confirmPassword?.touched || mouseoverSubmit == true) && signupForm.controls.confirmPassword?.errors.required">Required</em>
+              <em *ngIf="confirmPasswordReference.errors?.minlength">password > 8 characters</em>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text btn-warning">
+                    <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                  </span>
+                </div>
+                <input #confirmPasswordReference="ngModel"
+                       [ngClass]="{'is-invalid': signupForm.controls.confirmPassword?.invalid && (signupForm.controls.confirmPassword?.touched || mouseoverSubmit == true)}"
+                       [ngModel] appValidateConfirmPassword
+                       class="form-control is-invalid" id="confirmPassword" maxlength="30" minlength="8"
+                       name="confirmPassword"
+                       placeholder="Confirm Password"
+                       required
+                       type="password">
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col">
+                <em *ngIf="confirmPasswordReference.errors?.appValidateConfirmPassword == false">
+                  password and confirm password doesn't match
+                </em>
+              </div>
+            </div>
+
+            <div class="form-group mt-2">
+              <span (mouseenter)="mouseoverSubmit = true" (mouseleave)="mouseoverSubmit=false">
+              <button [disabled]="signupForm.invalid" class="btn btn-warning " type="submit">Submit</button>
+              </span>
+              <button [routerLink]="['/signin']" class="btn btn-warning float-right" type="button">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-4"></div>
+  </div>
+  <div class="row"></div>
+</div>
