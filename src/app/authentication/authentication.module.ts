@@ -18,8 +18,8 @@ import {ConfirmPasswordValidator} from './sign-up/confirm-password-validator/con
     CommonModule,
     RouterModule.forChild([
       {path: 'signin', component: SignInComponent},
-      {path: 'signup', component: SignUpComponent},
-      {path: '', redirectTo: '/signin', pathMatch: 'full'}
+      {path: 'signup', component: SignUpComponent}
+      // {path: '', redirectTo: '/signin', pathMatch: 'full'}
     ]),
     FormsModule,
     FontAwesomeModule
