@@ -1,0 +1,26 @@
+<mat-toolbar class="mat-raised-button bg-white cursor " role="heading">
+  <mat-toolbar-row>
+    <div class="container">
+      <div class="row">
+        <div class="col-1"></div>
+        <div class="col"></div>
+        <div class="col-4">
+              <div class="custom-search-field">
+                <form class="form-inline">
+                  <input class="form-control mr-sm-2 search-field" type="search" placeholder="Bucket" aria-label="Search">
+                  <button mat-mini-fab color="warn" type="submit" class="pointer" ><fa-icon [icon]="['fas', 'search']"></fa-icon></button>
+                </form>
+              </div>
+        </div>
+        <div class="col-2">
+          <img src="../../../assets/images/avatar.png" class="avatar" width="64" height="64">
+          <small class="name-field">{{user.name}}</small>
+
+        </div>
+
+      </div>
+    </div>
+
+  </mat-toolbar-row>
+</mat-toolbar>
+
