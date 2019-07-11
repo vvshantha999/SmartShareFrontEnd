@@ -5,9 +5,11 @@
   left: 0;
   right: 0;
 }
-.sidebar-nav-content{
-  background-color:  #eeeeee;
+
+.sidebar-nav-content {
+  background-color: #eeeeee;
 }
+
 .mat-drawer {
   width: 17% !important;
   background-color: #404e67;
@@ -107,6 +109,18 @@
       &:hover, &:active, &:focus {
         text-decoration: none;
         background-color: transparent;
+      }
+
+      &.active {
+        background: linear-gradient(to right, #ff8a00, #da1b60);
+        color: white !important;
+        font-weight: bold;
+        font-size: larger;
+
+        > .icon {
+          color: white !important;
+        }
+
       }
     }
 
@@ -249,17 +263,25 @@ a[data-toggle="collapse"] {
   flex: 0 0 4%;
 }
 
-.h-15{
-  height: 15%!important;
+.h-15 {
+  height: 15% !important;
 }
-.custom-padding{
+
+.custom-padding {
   padding: 5%;
 }
 
-.brand-name{
-  .icon{
+.brand-name {
+  .icon {
     color: red;
   }
+
   text-align: center;
   color: #e1e3e8;
 }
+
+.icon {
+  color: #999
+}
+
+

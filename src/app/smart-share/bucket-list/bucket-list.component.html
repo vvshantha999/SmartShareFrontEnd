@@ -1,1 +1,9 @@
-<app-side-nav-bar></app-side-nav-bar>
+<div class="container-fluid overflow">
+  <div class="row" >
+    <div class="col-4 bucket-card" *ngFor="let bucketName of bucketNames">
+      <app-bucket [bucketName]="bucketName"></app-bucket>
+    </div>
+  </div>
+</div>
+
+

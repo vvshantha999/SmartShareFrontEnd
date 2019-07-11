@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class BucketListComponent implements OnInit {
 
   constructor() { }
-
+  bucketNames = ['First Bucket', 'Second Bucket', 'Third Bucket', 'Fourth Bucket']
   ngOnInit() {
   }
 

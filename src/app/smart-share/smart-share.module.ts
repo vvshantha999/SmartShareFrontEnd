@@ -4,7 +4,7 @@ import { BucketListComponent } from './bucket-list/bucket-list.component';
 import {RouterModule} from '@angular/router';
 import { SideNavBarComponent } from './components/side-nav-bar/side-nav-bar.component';
 import {
-  MatButtonModule,
+  MatButtonModule, MatCardModule,
   MatCheckboxModule,
   MatFormFieldModule,
   MatIconModule,
@@ -16,17 +16,26 @@ import {FormsModule} from '@angular/forms';
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
-import {faBurn, faLightbulb, fas, faSearch} from '@fortawesome/free-solid-svg-icons';
+import {faBurn, fas, faSearch, faTrashAlt, faUsers} from '@fortawesome/free-solid-svg-icons';
+import {faBitbucket} from '@fortawesome/free-brands-svg-icons';
+import { BucketComponent } from './bucket/bucket.component';
+import { DashBoardComponent } from './dash-board/dash-board.component';
 
 
 
 @NgModule({
-  declarations: [BucketListComponent,  SideNavBarComponent, MenuBarComponent],
+  declarations: [BucketListComponent,  SideNavBarComponent, MenuBarComponent, BucketComponent, DashBoardComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
-      {path: 'buckets', component: BucketListComponent},
-      {path: '', redirectTo: '/buckets', pathMatch: 'full'}
+      {
+        path: 'dashboard',
+        component: DashBoardComponent,
+        children: [
+          {path: '', redirectTo: 'buckets', pathMatch: 'full'},
+          {path: 'buckets', component: BucketListComponent},
+        ]
+      }
     ]),
     MatSidenavModule,
     MatCheckboxModule,
@@ -36,12 +45,13 @@ import {faBurn, faLightbulb, fas, faSearch} from '@fortawesome/free-solid-svg-ic
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    MatCardModule
   ]
 })
 export class SmartShareModule {
   constructor() {
     library.add(fas);
-    library.add(faSearch, faBurn);
+    library.add(faSearch, faBurn, faBitbucket, faUsers, faTrashAlt);
   }
 }

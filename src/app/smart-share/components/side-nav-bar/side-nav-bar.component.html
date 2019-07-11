@@ -8,7 +8,7 @@
       </li>
       <li class="sidebar-navigation">Navigation</li>
       <li>
-        <a routerLink="/signup" routerLinkActive="active">Home</a>
+        <a [routerLink]="['buckets']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"> <fa-icon [icon]="['fab', 'bitbucket']" class="icon"></fa-icon> &nbsp;Buckets</a>
       </li>
       <li>
         <a href="#">About</a>
@@ -44,13 +44,14 @@
   </mat-sidenav>
 
   <mat-sidenav-content class="sidebar-nav-content">
-    <app-menu-bar>
-    </app-menu-bar>
+    <app-menu-bar></app-menu-bar>
+
     <button type="button" class="hamburger is-closed" (click)="sidenav.toggle()">
       <span class="hamb-top"></span>
       <span class="hamb-middle"></span>
       <span class="hamb-bottom"></span>
     </button>
+    <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
 

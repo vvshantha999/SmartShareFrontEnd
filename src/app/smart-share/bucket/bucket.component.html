@@ -1,0 +1,21 @@
+ <mat-card >
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{bucketName}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-actions>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-3"></div>
+          <div class="col-5">
+            <button mat-raised-button color="primary" >Add Users &nbsp; <fa-icon [icon]="['fas', 'users']"></fa-icon></button>
+          </div>
+          <div class="col-4">
+            <button mat-raised-button color="warn" >Delete &nbsp; <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon></button>
+          </div>
+        </div>
+      </div>
+
+    </mat-card-actions>
+  </mat-card>
+
