@@ -1,7 +1,14 @@
 <div class="container-fluid overflow">
   <div class="row" >
-    <div class="col-4 bucket-card" *ngFor="let bucketName of bucketNames">
+    <div class="col-4 bucket-card" *ngFor="let bucketName of filteredBuckets">
       <app-bucket [bucketName]="bucketName"></app-bucket>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button class="mine" mat-fab color="primary" (click)="openDialog()"  matTooltip="Add bucket">
+        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+      </button>
     </div>
   </div>
 </div>

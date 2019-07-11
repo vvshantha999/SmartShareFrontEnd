@@ -44,14 +44,14 @@
   </mat-sidenav>
 
   <mat-sidenav-content class="sidebar-nav-content">
-    <app-menu-bar></app-menu-bar>
+    <app-menu-bar (bucketNameToBeFilteredEmitter)="filterBuckets($event)"></app-menu-bar>
 
     <button type="button" class="hamburger is-closed" (click)="sidenav.toggle()">
       <span class="hamb-top"></span>
       <span class="hamb-middle"></span>
       <span class="hamb-bottom"></span>
     </button>
-    <router-outlet></router-outlet>
+    <router-outlet (activate)="onActivate($event)"></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
 

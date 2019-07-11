@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Create Bucket</h1>
+<form  #createBucketForm="ngForm" (ngSubmit)="createBucket(createBucketForm.value)"
+       autocomplete="off" novalidate>
+<div mat-dialog-content>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Bucket Name" [ngModel] name="bucketName" required #bucketNameReference="ngModel">
+    </mat-form-field>
+    <em
+      *ngIf=" (bucketNameReference.touched || bucketNameReference.dirty ) && bucketNameReference.errors?.required">
+      Bucket Name is required
+    </em>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-8"></div>
+        <div class="col-2">
+          <button mat-raised-button color="warn" (mousedown)="onCancelClick()" >cancel</button>
+        </div>
+        <div class="col-2">
+          <button type="submit" mat-raised-button color="primary" [disabled]="createBucketForm.invalid">Add bucket</button>
+        </div>
+      </div>
+    </div>
+</div>
+</form>
