@@ -1,0 +1,39 @@
+<div class="container-fluid margin-top">
+  <mat-card>
+    <mat-card-content>
+      <div class="container-fluid" cdkDropListGroup>
+        <div class="row">
+          <div class="col-6">
+            <mat-card-header>
+              <mat-card-title>Users</mat-card-title>
+            </mat-card-header>
+            <div
+              cdkDropList
+              [cdkDropListData]="users"
+              class="example-list"
+              (cdkDropListDropped)="drop($event)">
+              <div class="example-box" *ngFor="let item of users" cdkDrag>{{item}}</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <mat-card-header>
+              <mat-card-title>{{selectedBucket}}</mat-card-title>
+            </mat-card-header>
+            <div
+              cdkDropList
+              [cdkDropListData]="bucket"
+              class="example-list "
+              (cdkDropListDropped)="drop($event)">
+              <div class="example-box" *ngFor="let item of bucket" cdkDrag>{{item}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button class="mat-button-warning" [routerLink]="['/dashboard/buckets']">Cancel</button>
+      <button mat-button class="mat-button-primary">Add</button>
+    </mat-card-actions>
+  </mat-card>
+
+</div>

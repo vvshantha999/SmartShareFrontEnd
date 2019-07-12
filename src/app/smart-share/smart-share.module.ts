@@ -21,11 +21,14 @@ import {faBitbucket} from '@fortawesome/free-brands-svg-icons';
 import { BucketComponent } from './bucket/bucket.component';
 import { DashBoardComponent } from './dash-board/dash-board.component';
 import { DialogBoxComponent } from './components/dialog-box/dialog-box.component';
+import { AddUsersComponent } from './add-users/add-users.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 
 
 @NgModule({
-  declarations: [BucketListComponent,  SideNavBarComponent, MenuBarComponent, BucketComponent, DashBoardComponent, DialogBoxComponent],
+  declarations: [BucketListComponent,  SideNavBarComponent, MenuBarComponent, BucketComponent,
+    DashBoardComponent, DialogBoxComponent, AddUsersComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
@@ -35,6 +38,11 @@ import { DialogBoxComponent } from './components/dialog-box/dialog-box.component
         children: [
           {path: '', redirectTo: 'buckets', pathMatch: 'full'},
           {path: 'buckets', component: BucketListComponent},
+          {
+            path: 'addUsers',
+            component: AddUsersComponent,
+            data: {bucketName: ''}
+          }
         ]
       }
     ]),
@@ -49,7 +57,8 @@ import { DialogBoxComponent } from './components/dialog-box/dialog-box.component
     FontAwesomeModule,
     MatCardModule,
     MatDialogModule,
-    MatTooltipModule
+    MatTooltipModule,
+    DragDropModule
   ],
   entryComponents: [DialogBoxComponent]
 })
