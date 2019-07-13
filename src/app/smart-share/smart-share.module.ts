@@ -16,7 +16,7 @@ import {FormsModule} from '@angular/forms';
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
-import {faBurn, faPlus, fas, faSearch, faTrashAlt, faUsers} from '@fortawesome/free-solid-svg-icons';
+import {faBurn, faPlus, fas, faSearch, faTrashAlt, faUser, faUsers} from '@fortawesome/free-solid-svg-icons';
 import {faBitbucket} from '@fortawesome/free-brands-svg-icons';
 import { BucketComponent } from './bucket/bucket.component';
 import { DashBoardComponent } from './dash-board/dash-board.component';
@@ -65,6 +65,6 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 export class SmartShareModule {
   constructor() {
     library.add(fas);
-    library.add(faSearch, faBurn, faBitbucket, faUsers, faTrashAlt, faPlus);
+    library.add(faSearch, faBurn, faBitbucket, faUsers, faTrashAlt, faPlus, faUser);
   }
 }

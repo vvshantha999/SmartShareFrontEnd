@@ -12,7 +12,18 @@
               [cdkDropListData]="users"
               class="example-list"
               (cdkDropListDropped)="drop($event)">
-              <div class="example-box" *ngFor="let item of users" cdkDrag>{{item}}</div>
+              <div class="example-box" *ngFor="let item of users" cdkDrag>
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-2">
+                      <fa-icon [icon]="['fas', 'user']" class="icon"></fa-icon>
+                    </div>
+                    <div class="col">
+                      {{item}}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-6">
@@ -24,7 +35,18 @@
               [cdkDropListData]="bucket"
               class="example-list "
               (cdkDropListDropped)="drop($event)">
-              <div class="example-box" *ngFor="let item of bucket" cdkDrag>{{item}}</div>
+              <div class="example-box" *ngFor="let item of bucket" cdkDrag>
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-2">
+                      <fa-icon [icon]="['fas', 'user']" class="icon"></fa-icon>
+                    </div>
+                    <div class="col">
+                      {{item}}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
