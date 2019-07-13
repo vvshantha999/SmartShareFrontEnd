@@ -1,0 +1,37 @@
+<mat-card>
+  <div class="container-fluid">
+    <app-collapsable-card #collapsableCardReference>
+      <div class="row" card-title>
+        <div class="col-3">
+          <fa-icon [icon]="['fas', 'user']" class="icon"></fa-icon> &nbsp;<h5 class="user-label">{{user.name}}</h5>
+        </div>
+        <div class="col badge-wrapper">
+          <div class="row">
+            <button mat-flat-button color="warn" class="mat-button-buckets"
+                    (click)="collapsableCardReference.toggleContent()">
+              Buckets &nbsp;<span class="badge badge-light">{{user.buckets.count}}</span>
+            </button>
+          </div>
+          <div class="row">
+            <button mat-flat-button color="warn" class="mat-button-bucket-requests">
+              Bucket Requests&nbsp;<span class="badge badge-light">{{user.bucketRequests.count}}</span>
+            </button>
+          </div>
+          <div class="row">
+            <button mat-flat-button color="warn" class="mat-button-folder-file-requests">
+              Folder or File Requests &nbsp;<span class="badge badge-light">{{user.folderFileRequests.count}}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="row" card-body>
+        <div class="container-fluid h-50">
+          <mat-card>
+            <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg"
+                 alt="Photo of a Shiba Inu" height="200px">
+          </mat-card>
+        </div>
+      </div>
+    </app-collapsable-card>
+  </div>
+</mat-card>

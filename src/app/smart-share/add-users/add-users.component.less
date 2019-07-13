@@ -46,6 +46,10 @@
   background: white;
   font-size: 14px;
   font-weight: bold;
+
+  &:last-child {
+    border: none;
+  }
 }
 
 
@@ -63,10 +67,6 @@
 
 .cdk-drag-animating {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.example-box:last-child {
-  border: none;
 }
 
 .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
@@ -93,7 +93,8 @@
 .mat-card-actions {
   text-align: right;
 }
-.icon{
+
+.icon {
   font-size: 1.5em;
   color: Tomato;
 }

@@ -23,12 +23,15 @@ import { DashBoardComponent } from './dash-board/dash-board.component';
 import { DialogBoxComponent } from './components/dialog-box/dialog-box.component';
 import { AddUsersComponent } from './add-users/add-users.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import { UsersListComponent } from './users-list/users-list.component';
+import { UserComponent } from './user/user.component';
+import { CollapsableCardComponent } from './components/collapsable-card/collapsable-card.component';
 
 
 
 @NgModule({
   declarations: [BucketListComponent,  SideNavBarComponent, MenuBarComponent, BucketComponent,
-    DashBoardComponent, DialogBoxComponent, AddUsersComponent],
+    DashBoardComponent, DialogBoxComponent, AddUsersComponent, UsersListComponent, UserComponent, CollapsableCardComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
@@ -42,7 +45,8 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
             path: 'addUsers',
             component: AddUsersComponent,
             data: {bucketName: ''}
-          }
+          },
+          {path: 'users', component: UsersListComponent}
         ]
       }
     ]),

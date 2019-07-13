@@ -1,0 +1,59 @@
+.icon {
+  font-size: 3em;
+  color: Tomato;
+}
+
+.container-fluid {
+  text-align: center;
+}
+
+.user-label {
+  text-transform: capitalize;
+  font-family: sans-serif;
+  word-wrap: break-word;
+}
+
+.mat-button(@bgColorDark,@bgColorLight) {
+  &:focus {
+    outline: 0;
+  }
+  color: #fff;
+  background: linear-gradient(to right, @bgColorDark, @bgColorLight);
+  border-color: @bgColorDark;
+}
+
+.mat-button-bucket-requests {
+  .mat-button(#01a9ac, #01dbdf);
+}
+
+.mat-button-buckets {
+  .mat-button(#e05143, #ea857b);
+}
+
+.mat-button-folder-file-requests {
+  .mat-button(#fe5d70, #fe909d);
+}
+
+
+.margin-top(@value) {
+  margin-top: @value !important;
+}
+
+.badge-wrapper {
+  .col:nth-child(1) {
+    .margin-top(13px)
+  }
+
+  .row:nth-child(2) {
+    .margin-top(4px)
+  }
+
+  .row:nth-child(3) {
+    .margin-top(4px);
+    margin-bottom: 5px;
+  }
+}
+
+.mat-card{
+  height:100%
+}
