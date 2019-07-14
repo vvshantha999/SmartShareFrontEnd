@@ -6,9 +6,9 @@
         <div class="col"></div>
         <div class="col-4">
               <div class="custom-search-field">
-                <form class="form-inline">
+                <form class="form-inline" *ngIf="isThisBucketScreen">
                   <input class="form-control mr-sm-2 search-field" type="search" placeholder="Bucket" aria-label="Search"
-                         name="bucketFilter" [(ngModel)]="bucketFilter" autocomplete="off">
+                         name="bucketFilter" [(ngModel)]="bucketFilter" autocomplete="off" >
                   <button mat-mini-fab color="warn" type="submit" class="pointer" (click)="searchBucket()" ><fa-icon [icon]="['fas', 'search']"></fa-icon></button>
                 </form>
               </div>

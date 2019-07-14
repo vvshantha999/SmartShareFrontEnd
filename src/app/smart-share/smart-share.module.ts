@@ -8,15 +8,15 @@ import {
   MatCheckboxModule, MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
-  MatInputModule,
-  MatSidenavModule,
+  MatInputModule, MatPaginatorModule,
+  MatSidenavModule, MatSortModule, MatTableModule,
   MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
-import {faBurn, faPlus, fas, faSearch, faTrashAlt, faUser, faUsers} from '@fortawesome/free-solid-svg-icons';
+import {faBurn, faFileArchive, faPlus, fas, faSearch, faTrashAlt, faUser, faUserCog, faUsers} from '@fortawesome/free-solid-svg-icons';
 import {faBitbucket} from '@fortawesome/free-brands-svg-icons';
 import { BucketComponent } from './bucket/bucket.component';
 import { DashBoardComponent } from './dash-board/dash-board.component';
@@ -26,12 +26,17 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import { UsersListComponent } from './users-list/users-list.component';
 import { UserComponent } from './user/user.component';
 import { CollapsableCardComponent } from './components/collapsable-card/collapsable-card.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { AdministrationComponent } from './administration/administration.component';
+import { BucketManagementComponent } from './administration/bucket-management/bucket-management.component';
+import { FileAndFolderManagementComponent } from './administration/file-and-folder-management/file-and-folder-management.component';
 
 
 
 @NgModule({
   declarations: [BucketListComponent,  SideNavBarComponent, MenuBarComponent, BucketComponent,
-    DashBoardComponent, DialogBoxComponent, AddUsersComponent, UsersListComponent, UserComponent, CollapsableCardComponent],
+    DashBoardComponent, DialogBoxComponent, AddUsersComponent, UsersListComponent, UserComponent,
+    CollapsableCardComponent, AdminComponent, AdministrationComponent, BucketManagementComponent, FileAndFolderManagementComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
@@ -46,7 +51,17 @@ import { CollapsableCardComponent } from './components/collapsable-card/collapsa
             component: AddUsersComponent,
             data: {bucketName: ''}
           },
-          {path: 'users', component: UsersListComponent}
+          {path: 'users', component: UsersListComponent},
+          {
+            path: 'administration',
+            component: AdministrationComponent,
+            children: [
+              {path: '', redirectTo: 'bucket', pathMatch: 'full'},
+              {path: 'bucket', component: BucketManagementComponent, data: {filter: ''}},
+              {path: 'bucket', component: BucketManagementComponent},
+              {path: 'filesOrFolders', component: FileAndFolderManagementComponent}
+            ]
+          }
         ]
       }
     ]),
@@ -62,13 +77,16 @@ import { CollapsableCardComponent } from './components/collapsable-card/collapsa
     MatCardModule,
     MatDialogModule,
     MatTooltipModule,
-    DragDropModule
+    DragDropModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule
   ],
   entryComponents: [DialogBoxComponent]
 })
 export class SmartShareModule {
   constructor() {
     library.add(fas);
-    library.add(faSearch, faBurn, faBitbucket, faUsers, faTrashAlt, faPlus, faUser);
+    library.add(faSearch, faBurn, faBitbucket, faUsers, faTrashAlt, faPlus, faUser, faUserCog, faFileArchive);
   }
 }

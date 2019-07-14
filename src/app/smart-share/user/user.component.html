@@ -13,7 +13,7 @@
             </button>
           </div>
           <div class="row">
-            <button mat-flat-button color="warn" class="mat-button-bucket-requests">
+            <button mat-flat-button color="warn" class="mat-button-bucket-requests" [routerLink]="['/dashboard/administration/bucket',{filter:user.name}]">
               Bucket Requests&nbsp;<span class="badge badge-light">{{user.bucketRequests.count}}</span>
             </button>
           </div>
