@@ -1,0 +1,61 @@
+.card-icon(@firstColor,@secondColor){
+  flex: content-box;
+  border-radius: 3px;
+  padding: 5px;
+  margin-top: -40px !important;
+  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(255, 152, 0, 0.4);
+  background: linear-gradient(60deg, @firstColor, @secondColor);
+}
+
+.card-icon-accepted{
+  .card-icon(#66bb6a,#43a047)
+}
+
+.card-icon-rejected{
+  .card-icon(#ef5350,#e53935)
+}
+.card-icon-pending{
+  .card-icon(#ffa726,#fb8c00)
+}
+.card-icon-total{
+  .card-icon(#26c6da,#00acc1)
+}
+button{
+  outline: 0;
+}
+
+.mat-card-title{
+  text-align: center;
+}
+.card-footer{
+  background: white;
+  padding: 0px;
+}
+
+.icon{
+  font-size: 3em;
+  color:white;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+td, th {
+  width: 18%;
+}
+.mat-column-select {
+  overflow: initial;
+}
+.mat-cell {
+  padding: 8px 8px 8px 0;
+}
+
+.pointer-icon{
+  cursor: pointer;
+}
