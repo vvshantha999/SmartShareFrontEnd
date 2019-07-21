@@ -14,7 +14,6 @@ export class MenuBarComponent implements OnInit {
   private _isThisBucketScreen = true;
 
   get isThisBucketScreen() {
-    console.log(this._isThisBucketScreen);
     return this._isThisBucketScreen;
   }
 
@@ -35,7 +34,6 @@ export class MenuBarComponent implements OnInit {
     // @ts-ignore
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd && event.url === '/dashboard/buckets') {
-        console.log('inside');
         this._isThisBucketScreen = true;
       } else {
         this._isThisBucketScreen = false;

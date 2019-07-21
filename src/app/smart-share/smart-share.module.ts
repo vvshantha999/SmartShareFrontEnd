@@ -30,13 +30,14 @@ import { AdminComponent } from './components/admin/admin.component';
 import { AdministrationComponent } from './administration/administration.component';
 import { BucketManagementComponent } from './administration/bucket-management/bucket-management.component';
 import { FileAndFolderManagementComponent } from './administration/file-and-folder-management/file-and-folder-management.component';
+import { FlowerChartComponent } from './components/flower-chart/flower-chart.component';
 
 
 
 @NgModule({
   declarations: [BucketListComponent,  SideNavBarComponent, MenuBarComponent, BucketComponent,
     DashBoardComponent, DialogBoxComponent, AddUsersComponent, UsersListComponent, UserComponent,
-    CollapsableCardComponent, AdminComponent, AdministrationComponent, BucketManagementComponent, FileAndFolderManagementComponent],
+    CollapsableCardComponent, AdminComponent, AdministrationComponent, BucketManagementComponent, FileAndFolderManagementComponent, FlowerChartComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([

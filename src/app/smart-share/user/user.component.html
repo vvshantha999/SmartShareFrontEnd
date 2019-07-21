@@ -8,7 +8,7 @@
         <div class="col badge-wrapper">
           <div class="row">
             <button mat-flat-button color="warn" class="mat-button-buckets"
-                    (click)="collapsableCardReference.toggleContent()">
+                    (click)="collapsableCardReference.toggleContent()" (click)="flowerChartComponent.createChart()">
               Buckets &nbsp;<span class="badge badge-light">{{user.buckets.count}}</span>
             </button>
           </div>
@@ -27,8 +27,7 @@
       <div class="row" card-body>
         <div class="container-fluid h-50">
           <mat-card>
-            <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg"
-                 alt="Photo of a Shiba Inu" height="200px">
+            <app-flower-chart [data]="user.buckets.names" #flowerChartComponent></app-flower-chart>
           </mat-card>
         </div>
       </div>
