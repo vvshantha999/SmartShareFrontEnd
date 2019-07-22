@@ -19,7 +19,7 @@ button:focus{
   padding: .5rem 1rem;
   float: right;
 }
-.search-field{
+.search-field,.select-field {
   border-width: 0px 0px 2px 0px;
   border-radius: 0px;
   &:focus{
@@ -27,6 +27,19 @@ button:focus{
     border-bottom-color: #f44236;
   }
 }
+
+.custom-select-field{
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  font-size: medium;
+  width:75% !important;
+  padding: .5rem 0.5rem;
+  float: right;
+}
+
 .name-field{
   text-transform: capitalize;
   white-space: nowrap;

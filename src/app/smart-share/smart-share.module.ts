@@ -16,8 +16,19 @@ import {FormsModule} from '@angular/forms';
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
-import {faBurn, faFileArchive, faPlus, fas, faSearch, faTrashAlt, faUser, faUserCog, faUsers} from '@fortawesome/free-solid-svg-icons';
-import {faBitbucket} from '@fortawesome/free-brands-svg-icons';
+import {
+  faBurn,
+  faEye,
+  faFileArchive,
+  faPlus,
+  fas,
+  faSearch,
+  faTrashAlt,
+  faUser,
+  faUserCog,
+  faUsers
+} from '@fortawesome/free-solid-svg-icons';
+import {faBitbucket, faWpexplorer} from '@fortawesome/free-brands-svg-icons';
 import { BucketComponent } from './bucket/bucket.component';
 import { DashBoardComponent } from './dash-board/dash-board.component';
 import { DialogBoxComponent } from './components/dialog-box/dialog-box.component';
@@ -31,13 +42,15 @@ import { AdministrationComponent } from './administration/administration.compone
 import { BucketManagementComponent } from './administration/bucket-management/bucket-management.component';
 import { FileAndFolderManagementComponent } from './administration/file-and-folder-management/file-and-folder-management.component';
 import { FlowerChartComponent } from './components/flower-chart/flower-chart.component';
+import { FileExplorerComponent } from './file-explorer/file-explorer.component';
 
 
 
 @NgModule({
   declarations: [BucketListComponent,  SideNavBarComponent, MenuBarComponent, BucketComponent,
     DashBoardComponent, DialogBoxComponent, AddUsersComponent, UsersListComponent, UserComponent,
-    CollapsableCardComponent, AdminComponent, AdministrationComponent, BucketManagementComponent, FileAndFolderManagementComponent, FlowerChartComponent],
+    CollapsableCardComponent, AdminComponent, AdministrationComponent, BucketManagementComponent,
+    FileAndFolderManagementComponent, FlowerChartComponent, FileExplorerComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
@@ -53,6 +66,10 @@ import { FlowerChartComponent } from './components/flower-chart/flower-chart.com
             data: {bucketName: ''}
           },
           {path: 'users', component: UsersListComponent},
+          {path: 'explorer',
+            component: FileExplorerComponent,
+            data: {bucketName: ''}
+          },
           {
             path: 'administration',
             component: AdministrationComponent,
@@ -88,6 +105,6 @@ import { FlowerChartComponent } from './components/flower-chart/flower-chart.com
 export class SmartShareModule {
   constructor() {
     library.add(fas);
-    library.add(faSearch, faBurn, faBitbucket, faUsers, faTrashAlt, faPlus, faUser, faUserCog, faFileArchive);
+    library.add(faSearch, faBurn, faBitbucket, faUsers, faTrashAlt, faPlus, faUser, faUserCog, faFileArchive, faEye, faWpexplorer);
   }
 }

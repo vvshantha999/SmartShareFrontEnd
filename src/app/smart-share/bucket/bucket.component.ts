@@ -9,6 +9,7 @@ export class BucketComponent implements OnInit {
 
   constructor() { }
   @Input() bucketName: string;
+  admin = false;
 
   ngOnInit() {
   }

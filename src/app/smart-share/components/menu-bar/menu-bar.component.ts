@@ -10,9 +10,16 @@ export class MenuBarComponent implements OnInit {
 
   user: any;
   bucketFilter: string;
+  listOfBuckets = ['First', 'Second', 'Third'];
   // tslint:disable-next-line:variable-name
   private _isThisBucketScreen = true;
+  // tslint:disable-next-line:variable-name
+  private _isThisFileExplorerScreen = false;
+  @Output() bucketNameToBeFilteredEmitter = new EventEmitter();
+  selectedBucket = 'Choose Bucket';
 
+  constructor(private router: Router) {
+  }
   get isThisBucketScreen() {
     return this._isThisBucketScreen;
   }
@@ -20,11 +27,13 @@ export class MenuBarComponent implements OnInit {
   set isThisBucketScreen(value) {
     this._isThisBucketScreen = value;
   }
-
-  constructor(private router: Router) {
+  get isThisFileExplorerScreen(): any {
+    return this._isThisFileExplorerScreen;
   }
 
-  @Output() bucketNameToBeFilteredEmitter = new EventEmitter();
+  set isThisFileExplorerScreen(value: any) {
+    this._isThisFileExplorerScreen = value;
+  }
 
   ngOnInit() {
     const user = {
@@ -33,16 +42,16 @@ export class MenuBarComponent implements OnInit {
     this.user = user;
     // @ts-ignore
     this.router.events.subscribe((event: Event) => {
-      if (event instanceof NavigationEnd && event.url === '/dashboard/buckets') {
-        this._isThisBucketScreen = true;
-      } else {
-        this._isThisBucketScreen = false;
-      }
+      (event instanceof NavigationEnd && event.url === '/dashboard/buckets') ?
+        this._isThisBucketScreen = true :  this._isThisBucketScreen = false;
+      (event instanceof NavigationEnd && event.url === '/dashboard/explorer') ?
+        this._isThisFileExplorerScreen = true :  this._isThisFileExplorerScreen = false;
     });
   }
 
   searchBucket() {
-    this.bucketNameToBeFilteredEmitter.emit(this.bucketFilter);
+    const filter = this.isThisBucketScreen ? this.bucketFilter : this.selectedBucket;
+    this.bucketNameToBeFilteredEmitter.emit(filter);
   }
 
 }

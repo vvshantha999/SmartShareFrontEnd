@@ -31,6 +31,7 @@ export class BucketListComponent implements OnInit {
   }
 
   filterBuckets(bucketFilter: string) {
+    console.log('activated by event')
     if (bucketFilter === '') {
       this.filteredBuckets = this.bucketNames;
     } else {

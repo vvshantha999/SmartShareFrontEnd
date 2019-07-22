@@ -9,13 +9,13 @@ export class SideNavBarComponent {
 
   constructor() { }
   opened = true;
-  bucketListComponentReference;
+  routeOutletComponentReference;
 
-  onActivate(bucketListComponentReference) {
-    this.bucketListComponentReference = bucketListComponentReference;
+  onActivate(componentReference) {
+    this.routeOutletComponentReference = componentReference;
   }
 
   filterBuckets(bucketFilter: string) {
-    this.bucketListComponentReference.filterBuckets(bucketFilter);
+    this.routeOutletComponentReference.filterBuckets(bucketFilter);
   }
 }

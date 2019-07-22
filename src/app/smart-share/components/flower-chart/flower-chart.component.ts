@@ -22,7 +22,7 @@ export class FlowerChartComponent  {
     const element = this.flowerChartReference.nativeElement;
     const data = this.data;
     // @ts-ignore
-    const bucketsChart = this.flowerChart().width(500).height(300).colorSchemeValue(0.8);
+    const bucketsChart = this.flowerChart().width(400).height(250).colorSchemeValue(0.8);
     d3.select(element).datum(data).call(bucketsChart);
 
   }
