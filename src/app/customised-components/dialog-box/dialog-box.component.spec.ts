@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { DialogBoxComponent } from './dialog-box.component';
+import {DialogBoxComponent} from './dialog-box.component';
 
 describe('DialogBoxComponent', () => {
   let component: DialogBoxComponent;

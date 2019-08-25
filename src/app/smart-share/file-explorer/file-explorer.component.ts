@@ -7,6 +7,8 @@ import {ActivatedRoute, UrlSegment} from '@angular/router';
   styleUrls: ['./file-explorer.component.less']
 })
 export class FileExplorerComponent implements OnInit {
+
+
   private selectedBucket: string;
   private uploadPanelOpenState = false;
   private fileManagerPanelOpenState = true;
@@ -409,6 +411,7 @@ export class FileExplorerComponent implements OnInit {
       alert('choose bucket name');
     } else {
       this.selectedBucket = selectedBucket.toLowerCase();
+      this.displayFileStructureChart();
     }
   }
 

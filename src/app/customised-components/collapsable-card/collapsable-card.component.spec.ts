@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CollapsableCardComponent } from './collapsable-card.component';
+import {CollapsableCardComponent} from './collapsable-card.component';
 
 describe('CollapsableCardComponent', () => {
   let component: CollapsableCardComponent;

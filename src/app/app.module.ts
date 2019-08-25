@@ -6,20 +6,20 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AuthenticationModule} from './authentication/authentication.module';
 import {RouterModule} from '@angular/router';
 import {SmartShareModule} from './smart-share/smart-share.module';
-import {FileTreeListComponent} from './src/app/smart-share/components/file-tree-list/file-tree-list.component';
+import {CustomisedComponentsModule} from './customised-components/customised-components.module';
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    FileTreeListComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([]),
     AuthenticationModule,
-    SmartShareModule
+    SmartShareModule,
+    CustomisedComponentsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

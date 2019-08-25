@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
-import {DialogBoxComponent} from '../components/dialog-box/dialog-box.component';
+import {DialogBoxComponent} from '../../customised-components/dialog-box/dialog-box.component';
 
 
 @Component({
