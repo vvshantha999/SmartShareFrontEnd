@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation} from '@angular/core';
 import * as d3 from 'd3';
 
 @Component({
@@ -15,6 +15,9 @@ export class FileTreeListComponent implements OnInit {
   @ViewChild('fileTree')
   private fileTreeReference: ElementRef;
 
+  @Output() selectedFileOrFolderEmitter = new EventEmitter();
+
+
   constructor() {
   }
 
@@ -26,7 +29,7 @@ export class FileTreeListComponent implements OnInit {
     const element = this.fileTreeReference.nativeElement;
     const data = this.data;
     // @ts-ignore
-    const fileStructureChart = this.treeList();
+    const fileStructureChart = this.treeList().eventEmitter(this.selectedFileOrFolderEmitter);
     d3.select(element).datum(data).call(fileStructureChart);
 
   }
@@ -40,35 +43,40 @@ export class FileTreeListComponent implements OnInit {
     const nodeEnterTransition = d3.transition()
       .duration(duration)
       .ease(d3.easeLinear);
+    let eventEmitter;
 
     function chart(selection) {
 
       const data = selection.datum();
       const root = d3.hierarchy(data);
-      // @ts-ignore
-      root.x0 = 0;
-      // @ts-ignore
-      root.y0 = 0;
-      const nodes = root.descendants();
-      const height = nodes.length * barHeight + margin.top + margin.bottom;
+      const intialHeight = root.descendants().length * barHeight + margin.top + margin.bottom;
 
       // Building svg
 
       let svg = selection
         .selectAll('svg')
         .data([data])
-        .enter().append('svg').attr('height', height);
+        .enter().append('svg').attr('height', intialHeight);
 
       svg.append('g')
         .attr('width', width)
         .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
       svg = svg.merge(svg);
+      // const root = d3.hierarchy(data);
+      // @ts-ignore
+      root.x0 = 0;
+      // @ts-ignore
+      root.y0 = 0;
       update(root);
 
       function update(source) {
 
         // Compute the flattened node list.
+        const nodes = root.descendants();
+
+        const height = Math.max(500, nodes.length * barHeight + margin.top + margin.bottom);
+
         d3.select('svg').transition()
           .attr('height', height);
 
@@ -101,7 +109,6 @@ export class FileTreeListComponent implements OnInit {
           .attr('class', 'fas')
           .attr('font-size', '12px')
           .text((d) => d.children ? '\uf107' : d._children ? '\uf105' : '');
-
 
         // adding file or folder
         nodeEnter.append('text')
@@ -156,15 +163,16 @@ export class FileTreeListComponent implements OnInit {
 
       // Toggle children on click.
       function click(d) {
-        if (d.children) {
-          d._children = d.children;
-          d.children = null;
-        } else {
-          d.children = d._children;
-          d._children = null;
-        }
-        d3.select(this).remove();
-        update(d);
+        eventEmitter.emit(d.data.name);
+        // if (d.children) {
+        //   d._children = d.children;
+        //   d.children = null;
+        // } else {
+        //   d.children = d._children;
+        //   d._children = null;
+        // }
+        // d3.select(this).remove();
+        // update(d);
       }
     }
 
@@ -175,6 +183,10 @@ export class FileTreeListComponent implements OnInit {
     // tslint:disable-next-line:only-arrow-functions
     chart.margin = function(_) {
       return arguments.length ? ((margin = _) , chart) : margin;
+    };
+    // tslint:disable-next-line:only-arrow-functions
+    chart.eventEmitter = function(_) {
+      return arguments.length ? ((eventEmitter = _) , chart) : eventEmitter;
     };
     return chart;
   }

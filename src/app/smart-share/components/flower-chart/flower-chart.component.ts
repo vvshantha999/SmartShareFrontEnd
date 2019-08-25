@@ -57,7 +57,6 @@ export class FlowerChartComponent  {
 
       // Defining margins for the chart
       svg.attr('width', (d) => {
-        console.log(chartWidth + margin.left + margin.right);
         return chartWidth + margin.left + margin.right;
       })
         .attr('height', chartHeight + margin.top + margin.bottom);

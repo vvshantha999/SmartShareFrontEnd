@@ -1,0 +1,51 @@
+@fileManagerTitleColor: rgb(244, 67, 54);
+.primary-header {
+  &:focus {
+    background-color: @fileManagerTitleColor;
+  }
+
+  background-color: @fileManagerTitleColor !important;
+}
+
+.mat-expansion-panel-header-title {
+  color: white;
+  font-weight: bold;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.custom-button {
+  color: white;
+  font-weight: 400;
+
+  &.create-button {
+    background-color: #1b80e4 !important;
+  }
+
+  &.upload-button {
+    background-color: #ff751a !important;
+  }
+
+  &.download-button {
+    background-color: #47d147 !important;
+  }
+
+  &.delete-button {
+    background-color: #ff3333 !important;
+  }
+}
+
+.scrollable-container {
+  overflow-y: scroll;
+  height: 100px;
+}
+
+.close {
+  font-size: small !important;
+}
+
+button:focus {
+  outline: 0;
+}

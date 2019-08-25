@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {DialogBoxComponent} from '../components/dialog-box/dialog-box.component';
 
@@ -12,7 +12,8 @@ export class BucketListComponent implements OnInit {
   constructor(public dialog: MatDialog) {
     this.filteredBuckets = this.bucketNames;
   }
-  bucketNames = ['First Bucket', 'Second Bucket', 'Third Bucket', 'Fourth Bucket']
+
+  bucketNames = ['First Bucket', 'Second Bucket', 'Third Bucket', 'Fourth Bucket'];
   filteredBuckets;
   ngOnInit() {
   }
@@ -31,7 +32,6 @@ export class BucketListComponent implements OnInit {
   }
 
   filterBuckets(bucketFilter: string) {
-    console.log('activated by event')
     if (bucketFilter === '') {
       this.filteredBuckets = this.bucketNames;
     } else {
