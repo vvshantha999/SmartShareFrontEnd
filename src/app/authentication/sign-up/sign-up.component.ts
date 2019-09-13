@@ -1,4 +1,6 @@
-import { Component} from '@angular/core';
+import {Component} from '@angular/core';
+import {AuthenticationService} from '../authentication.service';
+import {User} from '../domain-models/User';
 
 @Component({
   templateUrl: './sign-up.component.html',
@@ -6,15 +8,16 @@ import { Component} from '@angular/core';
 })
 export class SignUpComponent  {
 
-  constructor() { }
+  private userInfo: User;
 
-  private userName: string;
-  private emailAddress: string;
-  private password: string;
-  private confirmPassword: string;
   private mouseoverSubmit: boolean;
 
+  constructor(private auth: AuthenticationService) {
+  }
+
   signUp(formValues) {
-    console.log(formValues);
+    console.log(formValues.value);
+    this.userInfo = new User(formValues.value.userName, formValues.value.emailAddress, formValues.value.password);
+    this.auth.registerUser(this.userInfo).subscribe();
   }
 }

@@ -34,6 +34,7 @@ import {FileAndFolderManagementComponent} from './administration/file-and-folder
 import {FileExplorerComponent} from './file-explorer/file-explorer.component';
 import {DialogBoxComponent} from '../customised-components/dialog-box/dialog-box.component';
 import {MatDividerModule, MatExpansionModule, MatListModule, MatTabsModule, MatTooltipModule} from '@angular/material';
+import {HttpClientModule} from '@angular/common/http';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import {MatDividerModule, MatExpansionModule, MatListModule, MatTabsModule, MatT
   imports: [
     CommonModule,
     CustomisedComponentsModule,
+    HttpClientModule,
     RouterModule.forChild([
       {
         path: 'dashboard',
@@ -98,3 +100,4 @@ export class SmartShareModule {
       faPlus, faUser, faUserCog, faFileArchive, faEye, faWpexplorer, faFolderPlus, faCloudDownloadAlt, faCloudUploadAlt, faFileAlt);
   }
 }
+
