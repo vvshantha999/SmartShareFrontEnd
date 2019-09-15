@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {catchError} from 'rxjs/operators';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {User} from './domain-models/User';
 import {Status} from './domain-models/Status';
 
@@ -22,15 +21,16 @@ export class AuthenticationService {
   }
 
   registerUser(userInfo: User): Observable<Status> {
-    return this.httpService.post<Status>(this.signUpUrl, userInfo, this.httpOptions).pipe(
-      catchError(this.handleError<Status>('registerUser', null))
-    );
+    return this.httpService.post<Status>(this.signUpUrl, userInfo, this.httpOptions);
+    //   .pipe(
+    //   catchError(this.handleError<Status>('registerUser', null))
+    // );
   }
 
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.log(error);
-      return of(result as T);
-    };
-  }
+  // private handleError<T>(operation = 'operation', result?: T) {
+  //   return (error: any): Observable<T> => {
+  //       console.log(error);
+  //       return of (result as T);
+  //   };
+  // }
 }

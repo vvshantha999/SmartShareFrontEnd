@@ -9,6 +9,7 @@ import {library} from '@fortawesome/fontawesome-svg-core';
 import {faAt, faCheck, faKey, fas, faUser} from '@fortawesome/free-solid-svg-icons';
 import {ConfirmPasswordValidator} from './sign-up/confirm-password-validator/confirm-password-validator.directive';
 import {HttpClientModule} from '@angular/common/http';
+import {ToastrModule} from 'ngx-toastr';
 
 
 @NgModule({
@@ -22,7 +23,12 @@ import {HttpClientModule} from '@angular/common/http';
     ]),
     FormsModule,
     FontAwesomeModule,
-    HttpClientModule
+    HttpClientModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    }),
   ]
 })
 export class AuthenticationModule {
