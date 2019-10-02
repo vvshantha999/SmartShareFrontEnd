@@ -28,6 +28,7 @@ export class SignUpComponent {
         }
       }, error => {
         this.errorMessage = error.error.message;
+      console.log(error);
         if (this.errorMessage.includes('E11000')) {
           this.toastr.error('Status: Failed!' + '\n' + 'Reason: ' + 'Email Exists', 'User Registration');
         } else {

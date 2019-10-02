@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {DialogBoxComponent} from '../../customised-components/dialog-box/dialog-box.component';
+import {FileServerService} from '../service/file-server.service';
 
 
 @Component({
@@ -9,13 +10,18 @@ import {DialogBoxComponent} from '../../customised-components/dialog-box/dialog-
   styleUrls: ['./bucket-list.component.less']
 })
 export class BucketListComponent implements OnInit {
-  constructor(public dialog: MatDialog) {
-    this.filteredBuckets = this.bucketNames;
-  }
+  bucketNames = ['Sample Bucket'];
 
-  bucketNames = ['First Bucket', 'Second Bucket', 'Third Bucket', 'Fourth Bucket'];
+  constructor(public dialog: MatDialog, private fileServerService: FileServerService) {
+  }
   filteredBuckets;
+
   ngOnInit() {
+    this.fileServerService.getBucketList().subscribe(result => {
+      console.log(result);
+      this.filteredBuckets = result;
+    });
+    console.log('test--1', this.filteredBuckets);
   }
 
   openDialog(): void {

@@ -34,7 +34,8 @@ import {FileAndFolderManagementComponent} from './administration/file-and-folder
 import {FileExplorerComponent} from './file-explorer/file-explorer.component';
 import {DialogBoxComponent} from '../customised-components/dialog-box/dialog-box.component';
 import {MatDividerModule, MatExpansionModule, MatListModule, MatTabsModule, MatTooltipModule} from '@angular/material';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {AuthInterceptorService} from '../authentication/auth-interceptor.service';
 
 
 @NgModule({
@@ -49,6 +50,9 @@ import {HttpClientModule} from '@angular/common/http';
     BucketManagementComponent,
     FileAndFolderManagementComponent,
     FileExplorerComponent],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}
+  ],
   imports: [
     CommonModule,
     CustomisedComponentsModule,

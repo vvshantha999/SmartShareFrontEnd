@@ -1,5 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
+import {AuthenticationService} from '../../authentication/authentication.service';
 
 @Component({
   selector: 'app-menu-bar',
@@ -18,7 +19,7 @@ export class MenuBarComponent implements OnInit {
   @Output() bucketNameToBeFilteredEmitter = new EventEmitter();
   selectedBucket = 'Choose Bucket';
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private auth: AuthenticationService) {
   }
   get isThisBucketScreen() {
     return this._isThisBucketScreen;
@@ -36,10 +37,12 @@ export class MenuBarComponent implements OnInit {
   }
 
   ngOnInit() {
-    const user = {
-      name: 'sethuram'
+    console.log(this.auth.role);
+    console.log(this.auth.userName);
+    this.user = {
+      role: this.auth.role,
+      name: this.auth.userName
     };
-    this.user = user;
     // @ts-ignore
     this.router.events.subscribe((event: Event) => {
       (event instanceof NavigationEnd && event.url === '/dashboard/buckets') ?
