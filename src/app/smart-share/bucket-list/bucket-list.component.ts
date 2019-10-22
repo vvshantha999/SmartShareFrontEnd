@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {DialogBoxComponent} from '../../customised-components/dialog-box/dialog-box.component';
 import {FileServerService} from '../service/file-server.service';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -12,7 +13,7 @@ import {FileServerService} from '../service/file-server.service';
 export class BucketListComponent implements OnInit {
   bucketNames = ['Sample Bucket'];
 
-  constructor(public dialog: MatDialog, private fileServerService: FileServerService) {
+  constructor(public dialog: MatDialog, private fileServerService: FileServerService, private router: Router) {
   }
   filteredBuckets;
 
@@ -20,7 +21,14 @@ export class BucketListComponent implements OnInit {
     this.fileServerService.getBucketList().subscribe(result => {
       console.log(result);
       this.filteredBuckets = result;
-    });
+      },
+      error => {
+        if (error.error.status in [428, 412]) {
+          this.router.navigateByUrl('/signin');
+        }
+        console.log(error);
+        console.log(error.error.status);
+      });
     console.log('test--1', this.filteredBuckets);
   }
 

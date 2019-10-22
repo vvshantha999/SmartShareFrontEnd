@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, UrlSegment} from '@angular/router';
+import {FileServerService} from '../../smart-share/service/file-server.service';
+
 
 @Component({
   selector: 'app-file-explorer',
@@ -397,7 +399,7 @@ export class FileExplorerComponent implements OnInit {
     };
 
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private fileServerService: FileServerService) {
   }
 
   ngOnInit() {
@@ -434,7 +436,23 @@ export class FileExplorerComponent implements OnInit {
   }
 
   onUpload() {
-    console.log('Uploading.....');
+    console.log(typeof (this.filesToBeUploaded[0]));
+    const reader = new FileReader();
+    let fileContent;
+    reader.onloadend = (e) => {
+      fileContent = reader.result;
+      console.log(fileContent);
+      const dataToBeUploaded = {
+        uploadedFileName: this.filesToBeUploaded[0].name,
+        uploadedFileContent: fileContent,
+        ownerOfTheFile: 'sethuram',
+        selectedFolderWhereFolderHasToBeUploaded: '/',
+        bucketName: 'file.server.1'
+      };
+      console.log('Uploading.....');
+      this.fileServerService.uploadFile(dataToBeUploaded).subscribe();
+    };
+    reader.readAsDataURL(this.filesToBeUploaded[0]);
   }
 
   cancelUploadTask() {
