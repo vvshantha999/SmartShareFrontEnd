@@ -30,17 +30,17 @@
                 <div class="container-fluid m-2">
                   <div class="row">
                     <div class="col">
-                      <mat-slide-toggle [checked]="checked" color="warn">
+                      <mat-slide-toggle [(ngModel)]="readChecked" color="warn">
                         <button color="warn" mat-button>Read</button>
                       </mat-slide-toggle>
                     </div>
                     <div class="col">
-                      <mat-slide-toggle [checked]="checked" color="warn">
+                      <mat-slide-toggle [(ngModel)]="writeChecked" color="warn">
                         <button color="warn" mat-button>Write</button>
                       </mat-slide-toggle>
                     </div>
                     <div class="col">
-                      <mat-slide-toggle [checked]="checked" color="warn">
+                      <mat-slide-toggle [(ngModel)]="deleteChecked" color="warn">
                         <button color="warn" mat-button>Delete</button>
                       </mat-slide-toggle>
                     </div>

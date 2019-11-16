@@ -12,7 +12,7 @@
                   <button mat-mini-fab color="warn" type="submit" class="pointer" (click)="searchBucket()" ><fa-icon [icon]="['fas', 'search']"></fa-icon></button>
                 </form>
               </div>
-          <div class="input-group custom-select-field" *ngIf="isThisFileExplorerScreen">
+          <div *ngIf="isThisFileExplorerScreen||isThisRelationsScreen" class="input-group custom-select-field">
             <select class="custom-select select-field" [(ngModel)]="selectedBucket"  >
               <option selected>Choose Bucket</option>
               <option *ngFor="let bucket of listOfBuckets" [value]="bucket">{{bucket}}</option>

@@ -50,7 +50,9 @@ import {UserTreeComponent} from './user-tree/user-tree.component';
     MatCardModule,
     MatButtonModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    OwnerTreeComponent,
+    UserTreeComponent
   ],
   imports: [
     CommonModule,

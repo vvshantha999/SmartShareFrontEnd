@@ -18,6 +18,8 @@ export class MenuBarComponent implements OnInit {
   private _isThisFileExplorerScreen = false;
   @Output() bucketNameToBeFilteredEmitter = new EventEmitter();
   selectedBucket = 'Choose Bucket';
+  // tslint:disable-next-line:variable-name
+  private _isThisRelationsScreen = false;
 
   constructor(private router: Router, private auth: AuthenticationService) {
   }
@@ -25,7 +27,17 @@ export class MenuBarComponent implements OnInit {
     return this._isThisBucketScreen;
   }
 
-  set isThisBucketScreen(value) {
+
+  get isThisRelationsScreen(): boolean {
+    return this._isThisRelationsScreen;
+  }
+
+  set isThisRelationsScreen(value: boolean) {
+    this._isThisRelationsScreen = value;
+  }
+
+  // tslint:disable-next-line:adjacent-overload-signatures
+  set isThisBucketScreen(value: boolean) {
     this._isThisBucketScreen = value;
   }
   get isThisFileExplorerScreen(): any {
@@ -49,6 +61,8 @@ export class MenuBarComponent implements OnInit {
         this._isThisBucketScreen = true :  this._isThisBucketScreen = false;
       (event instanceof NavigationEnd && event.url === '/dashboard/explorer') ?
         this._isThisFileExplorerScreen = true :  this._isThisFileExplorerScreen = false;
+      (event instanceof NavigationEnd && event.url === '/dashboard/relationships') ?
+        this._isThisRelationsScreen = true : this._isThisRelationsScreen = false;
     });
   }
 

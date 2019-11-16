@@ -9,6 +9,8 @@ import * as d3 from 'd3';
 export class UserTreeComponent implements OnInit {
 
   @Input() data;
+  @Input() width;
+  @Input() height;
   // @ts-ignore
   @ViewChild('userTree')
   private userTreeElementReference: ElementRef;
@@ -241,6 +243,9 @@ export class UserTreeComponent implements OnInit {
 
   ngOnInit() {
     this.data = this.testData;
+    console.log(this.width);
+    console.log(this.height);
+    this.createChart();
   }
 
   private createChart() {
@@ -249,14 +254,15 @@ export class UserTreeComponent implements OnInit {
     const data = this.data;
 
     // @ts-ignore
-    const customForceDirectedTree = this.forceDirectedTree().width(700).height(700);
+    // tslint:disable-next-line:max-line-length
+    const customForceDirectedTree = this.forceDirectedTree().width(this.width).height(this.height);
     d3.select(element).datum(data).call(customForceDirectedTree);
   }
 
   private forceDirectedTree() {
-    let margin = {top: 20, right: 10, bottom: 20, left: 10};
-    let width = 600;
-    let height = 600;
+    let margin = {top: 10, right: 10, bottom: 10, left: 10};
+    let width = 700;
+    let height = 700;
 
     function chart(selection) {
       const data = selection.datum();
@@ -368,8 +374,8 @@ export class UserTreeComponent implements OnInit {
             innerColumns +
             '</div>' +
             '</div></div>';
-        }).style('left', (d3.event.pageX) + 'px')
-          .style('top', (d3.event.pageY - 28) + 'px');
+        }).style('left', (d3.event.pageX - 270) + 'px')
+          .style('top', (d3.event.pageY - 160) + 'px');
       };
 
       const mouseout = () => {
@@ -413,7 +419,7 @@ export class UserTreeComponent implements OnInit {
         .attr('patternUnits', 'userSpaceOnUse')
         .attr('patternUnits', 'userSpaceOnUse')
         .append('svg:image')
-        .attr('xlink:href', 'data/bucket.png')
+        .attr('xlink:href', 'https://user-images.githubusercontent.com/18228016/68896905-56851200-0724-11ea-8a31-b5723aea30fa.png')
         .attr('width', 34)
         .attr('height', 34)
         .attr('x', 0)

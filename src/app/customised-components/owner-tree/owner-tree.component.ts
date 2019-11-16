@@ -9,6 +9,8 @@ import * as d3 from 'd3';
 export class OwnerTreeComponent implements OnInit {
 
   @Input() data;
+  @Input() width;
+  @Input() height;
   // @ts-ignore
   @ViewChild('ownerTree')
   private ownerTreeElementReference: ElementRef;
@@ -400,22 +402,24 @@ export class OwnerTreeComponent implements OnInit {
 
   ngOnInit() {
     this.data = this.testData;
+    this.createChart();
   }
 
-  private createChart() {
+  public createChart() {
 
     const element = this.ownerTreeElementReference.nativeElement;
     const data = this.data;
 
     // @ts-ignore
-    const customForceDirectedTree = this.forceDirectedTree().width(700).height(700);
+    // tslint:disable-next-line:max-line-length
+    const customForceDirectedTree = this.forceDirectedTree().width(this.ownerTreeElementReference.nativeElement.clientWidth).height(this.height);
     d3.select(element).datum(data).call(customForceDirectedTree);
   }
 
   private forceDirectedTree() {
-    let margin = {top: 20, right: 10, bottom: 20, left: 10};
-    let width = 600;
-    let height = 600;
+    let margin = {top: 10, right: 10, bottom: 10, left: 10};
+    let width = 700;
+    let height = 700;
 
     function chart(selection) {
 
@@ -484,8 +488,8 @@ export class OwnerTreeComponent implements OnInit {
             '</tbody>' +
             '</table>' +
             '</div></div>';
-        }).style('left', (d3.event.pageX + 10) + 'px')
-          .style('top', (d3.event.pageY - 28) + 'px');
+        }).style('left', (d3.event.pageX - 270) + 'px')
+          .style('top', (d3.event.pageY - 225) + 'px');
       };
 
       const mouseout = () => {

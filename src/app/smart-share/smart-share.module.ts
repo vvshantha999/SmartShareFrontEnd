@@ -34,6 +34,7 @@ import {FileAndFolderManagementComponent} from './administration/file-and-folder
 import {FileExplorerComponent} from './file-explorer/file-explorer.component';
 import {DialogBoxComponent} from '../customised-components/dialog-box/dialog-box.component';
 import {
+  MatDialogModule,
   MatDividerModule,
   MatExpansionModule,
   MatListModule,
@@ -43,6 +44,7 @@ import {
 } from '@angular/material';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AuthInterceptorService} from '../authentication/auth-interceptor.service';
+import {RelationshipComponent} from './relationship/relationship.component';
 
 
 @NgModule({
@@ -56,7 +58,8 @@ import {AuthInterceptorService} from '../authentication/auth-interceptor.service
     AdministrationComponent,
     BucketManagementComponent,
     FileAndFolderManagementComponent,
-    FileExplorerComponent],
+    FileExplorerComponent,
+    RelationshipComponent],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}
   ],
@@ -83,6 +86,10 @@ import {AuthInterceptorService} from '../authentication/auth-interceptor.service
             data: {bucketName: ''}
           },
           {
+            path: 'relationships',
+            component: RelationshipComponent
+          },
+          {
             path: 'administration',
             component: AdministrationComponent,
             children: [
@@ -102,6 +109,7 @@ import {AuthInterceptorService} from '../authentication/auth-interceptor.service
     MatTabsModule,
     MatListModule,
     MatSlideToggleModule,
+    MatDialogModule,
   ],
   entryComponents: [DialogBoxComponent]
 })

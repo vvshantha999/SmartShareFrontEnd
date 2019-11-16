@@ -23,6 +23,10 @@
       <li>
         <a [routerLink]="['explorer']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"> <fa-icon [icon]="['fab', 'wpexplorer']" class="icon"></fa-icon> &nbsp;File Explorer</a>
       </li>
+      <li>
+        <a [routerLinkActiveOptions]="{exact:true}" [routerLink]="['relationships']" routerLinkActive="active">
+          <fa-icon [icon]="['fas', 'project-diagram']" class="icon"></fa-icon> &nbsp;Relationships</a>
+      </li>
     </ul>
 
   </mat-sidenav>

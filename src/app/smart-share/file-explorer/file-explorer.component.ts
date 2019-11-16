@@ -399,6 +399,9 @@ export class FileExplorerComponent implements OnInit {
         }
       ]
     };
+  private readChecked = false;
+  private writeChecked = false;
+  private deleteChecked = false;
 
 
 
