@@ -1,0 +1,38 @@
+<div class="container-fluid">
+  <mat-card>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-1">
+          <mat-card-subtitle>Perspective</mat-card-subtitle>
+        </div>
+        <div class="col"></div>
+
+        <div class="col-1">
+          <mat-slide-toggle
+            (change)="changePerspective()"
+            [(ngModel)]="perspective" class="float-right" color=warn>
+          </mat-slide-toggle>
+        </div>
+        <div class="col-1">
+          <button class="float-right" color="warn" mat-raised-button>
+            {{perspectiveLabel}}
+          </button>
+        </div>
+      </div>
+    </div>
+    <mat-card-content>
+      <mat-card *ngIf="perspectiveLabel=='Owner'">
+        <mat-card-subtitle>User's Files accessed by others</mat-card-subtitle>
+        <mat-card-content class="scrollable-container">
+          <app-owner-tree [height]=1000 [width]=1200></app-owner-tree>
+        </mat-card-content>
+      </mat-card>
+      <mat-card *ngIf="perspectiveLabel=='User'">
+        <mat-card-subtitle>Files accessed by the user in the bucket :</mat-card-subtitle>
+        <mat-card-content class="scrollable-container">
+          <app-user-tree [height]=1000 [width]=1200></app-user-tree>
+        </mat-card-content>
+      </mat-card>
+    </mat-card-content>
+  </mat-card>
+</div>
