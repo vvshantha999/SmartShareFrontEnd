@@ -25,7 +25,8 @@ export class FileServerService {
 
   uploadFile(body): Observable<any> {
     console.log('Inside upload file');
-    const testUrl = 'http://localhost:8084/file';
+    console.log('Inside upload file', body);
+    const testUrl = 'http://localhost:8084/object';
     return this.httpService.post<any>(testUrl, body, this.httpOptions)
       .pipe(
         tap(data => {

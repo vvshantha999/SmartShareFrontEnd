@@ -33,7 +33,14 @@ import {BucketManagementComponent} from './administration/bucket-management/buck
 import {FileAndFolderManagementComponent} from './administration/file-and-folder-management/file-and-folder-management.component';
 import {FileExplorerComponent} from './file-explorer/file-explorer.component';
 import {DialogBoxComponent} from '../customised-components/dialog-box/dialog-box.component';
-import {MatDividerModule, MatExpansionModule, MatListModule, MatTabsModule, MatTooltipModule} from '@angular/material';
+import {
+  MatDividerModule,
+  MatExpansionModule,
+  MatListModule,
+  MatSlideToggleModule,
+  MatTabsModule,
+  MatTooltipModule
+} from '@angular/material';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AuthInterceptorService} from '../authentication/auth-interceptor.service';
 
@@ -94,6 +101,7 @@ import {AuthInterceptorService} from '../authentication/auth-interceptor.service
     MatDividerModule,
     MatTabsModule,
     MatListModule,
+    MatSlideToggleModule,
   ],
   entryComponents: [DialogBoxComponent]
 })

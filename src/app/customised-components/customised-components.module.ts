@@ -22,6 +22,8 @@ import {
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
+import {OwnerTreeComponent} from './owner-tree/owner-tree.component';
+import {UserTreeComponent} from './user-tree/user-tree.component';
 
 
 @NgModule({
@@ -32,7 +34,9 @@ import {RouterModule} from '@angular/router';
     DialogBoxComponent,
     CollapsableCardComponent,
     FlowerChartComponent,
-    FileTreeListComponent
+    FileTreeListComponent,
+    OwnerTreeComponent,
+    UserTreeComponent
   ],
   exports: [
     AdminComponent,
