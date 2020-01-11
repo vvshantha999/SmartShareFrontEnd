@@ -16,6 +16,7 @@ export class FileTreeListComponent implements OnInit {
   private fileTreeReference: ElementRef;
 
   @Output() selectedFileOrFolderEmitter = new EventEmitter();
+  @Output() lastModifiedEventEmitter = new EventEmitter();
 
 
   constructor() {
@@ -29,7 +30,8 @@ export class FileTreeListComponent implements OnInit {
     const element = this.fileTreeReference.nativeElement;
     const data = this.data;
     // @ts-ignore
-    const fileStructureChart = this.treeList().eventEmitter(this.selectedFileOrFolderEmitter);
+    // tslint:disable-next-line:max-line-length
+    const fileStructureChart = this.treeList().eventEmitter(this.selectedFileOrFolderEmitter).lastModifiedEmitter(this.lastModifiedEventEmitter);
     d3.select(element).datum(data).call(fileStructureChart);
 
   }
@@ -44,6 +46,7 @@ export class FileTreeListComponent implements OnInit {
       .duration(duration)
       .ease(d3.easeLinear);
     let eventEmitter;
+    let lastModifiedEmitter;
 
     function chart(selection) {
 
@@ -69,6 +72,10 @@ export class FileTreeListComponent implements OnInit {
       // @ts-ignore
       root.y0 = 0;
       update(root);
+
+      function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+      }
 
       function update(source) {
 
@@ -132,7 +139,6 @@ export class FileTreeListComponent implements OnInit {
             d3.selectAll('.selected').classed('selected', false);
           });
 
-
         // Transition nodes to their new position.
         nodeEnter.transition(nodeEnterTransition)
           .attr('transform', (d) => 'translate(' + d.y + ',' + d.x + ')')
@@ -151,6 +157,24 @@ export class FileTreeListComponent implements OnInit {
           .style('opacity', 0)
           .remove();
 
+        // Add different appearance  to recently updated nodes
+        nodeEnter
+          .style('fill', (d) => {
+            if (new Date(d.data.lastModified).toDateString() === new Date().toDateString()) {
+              return d3.interpolateHsl('red', 'blue')(getRandomInt(0, 1));
+            }
+          })
+          .attr('stroke', (d) => {
+            if (new Date(d.data.lastModified).toDateString() === new Date().toDateString()) {
+              return d3.interpolateHsl('blue', 'red')(getRandomInt(0, 1));
+            }
+          })
+          .attr('stroke-width', (d) => {
+            if (new Date(d.data.lastModified).toDateString() === new Date().toDateString()) {
+              return 0.5;
+            }
+          });
+
 
         // Stash the old positions for transition.
         root.each((d) => {
@@ -164,6 +188,7 @@ export class FileTreeListComponent implements OnInit {
       // Toggle children on click.
       function click(d) {
         eventEmitter.emit(d.data.name);
+        lastModifiedEmitter.emit(new Date(d.data.lastModified).toDateString());
         // if (d.children) {
         //   d._children = d.children;
         //   d.children = null;
@@ -187,6 +212,10 @@ export class FileTreeListComponent implements OnInit {
     // tslint:disable-next-line:only-arrow-functions
     chart.eventEmitter = function(_) {
       return arguments.length ? ((eventEmitter = _) , chart) : eventEmitter;
+    };
+    // tslint:disable-next-line:only-arrow-functions
+    chart.lastModifiedEmitter = function(_) {
+      return arguments.length ? ((lastModifiedEmitter = _) , chart) : lastModifiedEmitter;
     };
     return chart;
   }

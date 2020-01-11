@@ -15,6 +15,7 @@ export class FileExplorerComponent implements OnInit {
   private selectedBucket: string;
   private uploadPanelOpenState = false;
   private fileManagerPanelOpenState = true;
+  private lastModified: Date;
   private selectedFileOrFolder;
   private filesToBeUploaded: File[] = [];
   private filesToBeUploadedWithMetadata: Array<FileToUpload> = [];
@@ -24,6 +25,7 @@ export class FileExplorerComponent implements OnInit {
       children: [
         {
           name: 'analytics',
+          lastModified: '1-11-2020',
           children: [
             {
               name: 'cluster',
@@ -487,6 +489,10 @@ export class FileExplorerComponent implements OnInit {
 
   private getFileStructureChartData() {
     return this.testData;
+  }
+
+  assignLastModified(lastModifiedEvent) {
+    this.lastModified = lastModifiedEvent;
   }
 }
 

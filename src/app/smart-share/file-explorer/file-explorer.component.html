@@ -5,6 +5,7 @@
         <div class="card-body">
           <div class="container-fluid">
             <app-file-tree-list (selectedFileOrFolderEmitter)="assignSelectedFileOrFolder($event)"
+                                (lastModifiedEventEmitter)="assignLastModified($event)"
                                 [data]="displayFileStructureChart()"></app-file-tree-list>
           </div>
         </div>
@@ -25,6 +26,22 @@
                 <mat-form-field class="example-full-width mt-2">
                   <textarea [(ngModel)]="selectedFileOrFolder" matInput placeholder="Selected Folder"></textarea>
                 </mat-form-field>
+
+                <div class="container-fluid mb-2 p-0">
+                  <div class="row">
+                    <div class="col-4">
+                      <button color="warn" mat-stroked-button>Last Modified</button>
+                    </div>
+                    <div class="col-4" style="text-align: center">
+                      <div class="mt-2"> {{lastModified}}</div>
+                    </div>
+                    <div class="col"></div>
+                  </div>
+
+
+                </div>
+
+
                 <mat-divider></mat-divider>
                 <small><b class="access">Available Access</b></small>
                 <div class="container-fluid m-2">
