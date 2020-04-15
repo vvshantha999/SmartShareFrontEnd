@@ -1,12 +1,26 @@
 <div class="container-fluid overflow">
-  <div class="row" >
-    <div class="col-4 bucket-card" *ngFor="let bucketName of filteredBuckets">
-      <app-bucket [bucketName]="bucketName"></app-bucket>
+  <div class="row">
+    <div class="col-11 pr-0"></div>
+    <div *ngIf="perspectiveButton" class="col-1 pl-0">
+
+      <mat-button-toggle-group (change)="changePerspective($event)" [value]="perspective" class="mt-2" color="warn">
+        <mat-button-toggle matTooltip="Admin" value="admin">
+          <fa-icon [icon]="['fas', 'user-secret']" class="icon"></fa-icon>
+        </mat-button-toggle>
+        <mat-button-toggle matTooltip="User" value="user">
+          <fa-icon [icon]="['fas', 'user-tie']" class="icon"></fa-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+  </div>
+  <div class="row">
+    <div *ngFor="let bucket of filteredBuckets" class="col-4 mt-3">
+      <app-bucket [bucket]="bucket" [perspective]="this.perspective"></app-bucket>
     </div>
   </div>
   <div class="row">
     <div class="col">
-      <button class="mine" mat-fab color="primary" (click)="openDialog()"  matTooltip="Add bucket">
+      <button class="mine" mat-fab color="primary" (click)="openDialog()" matTooltip="Add bucket">
         <fa-icon [icon]="['fas', 'plus']"></fa-icon>
       </button>
     </div>

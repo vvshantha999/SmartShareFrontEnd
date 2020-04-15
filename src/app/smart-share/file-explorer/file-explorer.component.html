@@ -4,9 +4,9 @@
       <div class="card">
         <div class="card-body">
           <div class="container-fluid">
+<!--            <ngx-spinner></ngx-spinner>-->
             <app-file-tree-list (selectedFileOrFolderEmitter)="assignSelectedFileOrFolder($event)"
-                                (lastModifiedEventEmitter)="assignLastModified($event)"
-                                [data]="displayFileStructureChart()"></app-file-tree-list>
+                                [data]="bucketObjects"></app-file-tree-list>
           </div>
         </div>
       </div>
@@ -24,7 +24,8 @@
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <mat-form-field class="example-full-width mt-2">
-                  <textarea [(ngModel)]="selectedFileOrFolder" matInput placeholder="Selected Folder"></textarea>
+                  <textarea (keyup.enter)="submitNewFolder()" [(ngModel)]="selectedFileOrFolder"
+                            [disabled]="disableTextBox" matInput placeholder="Selected Folder"></textarea>
                 </mat-form-field>
 
                 <div class="container-fluid mb-2 p-0">
@@ -32,7 +33,7 @@
                     <div class="col-4">
                       <button color="warn" mat-stroked-button>Last Modified</button>
                     </div>
-                    <div class="col-4" style="text-align: center">
+                    <div class="col-5" style="text-align: center">
                       <div class="mt-2"> {{lastModified}}</div>
                     </div>
                     <div class="col"></div>
@@ -47,17 +48,18 @@
                 <div class="container-fluid m-2">
                   <div class="row">
                     <div class="col">
-                      <mat-slide-toggle [(ngModel)]="readChecked" color="warn">
+                      <mat-slide-toggle (change)="createAccessRequest('read')" [(ngModel)]="readChecked" color="warn">
                         <button color="warn" mat-button>Read</button>
                       </mat-slide-toggle>
                     </div>
                     <div class="col">
-                      <mat-slide-toggle [(ngModel)]="writeChecked" color="warn">
+                      <mat-slide-toggle (change)="createAccessRequest('write')" [(ngModel)]="writeChecked" color="warn">
                         <button color="warn" mat-button>Write</button>
                       </mat-slide-toggle>
                     </div>
                     <div class="col">
-                      <mat-slide-toggle [(ngModel)]="deleteChecked" color="warn">
+                      <mat-slide-toggle (change)="createAccessRequest('delete')" [(ngModel)]="deleteChecked"
+                                        color="warn">
                         <button color="warn" mat-button>Delete</button>
                       </mat-slide-toggle>
                     </div>
@@ -67,13 +69,15 @@
                 <div class="container-fluid mt-2">
                   <div class="row">
                     <div class="col-3">
-                      <button class="custom-button create-button" mat-raised-button title="create folder">
+                      <button (click)="createNewFolder()" class="custom-button create-button" mat-raised-button
+                              title="create folder">
                         <fa-icon [icon]="['fas', 'folder-plus']"></fa-icon>
                         create
                       </button>
                     </div>
                     <div class="col-3">
-                      <button class="custom-button download-button" mat-raised-button title="download file or folder">
+                      <button (click)='downloadFileFolder()' class="custom-button download-button" mat-raised-button
+                              title="download file or folder">
                         <small>
                           <fa-icon [icon]="['fas', 'cloud-download-alt']" class="icon"></fa-icon>
                           Download
@@ -88,7 +92,8 @@
                       </button>
                     </div>
                     <div class="col-3">
-                      <button class="custom-button delete-button" mat-raised-button title="delete file or folder">
+                      <button (click)="deleteFileFolder()" class="custom-button delete-button" mat-raised-button
+                              title="delete file or folder">
                         <fa-icon [icon]="['fas', 'trash-alt']" class="icon"></fa-icon>
                         Delete
                       </button>
@@ -175,7 +180,7 @@
                                 <input (change)="onFolderSelected($event)" class="custom-file-input" directory
                                        id="inputGroupFolder" mozdirectory msdirectory multiple="multiple" odirectory
                                        title="choose folder" type="file" webkitdirectory>
-                                <label class="custom-file-label" for="inputGroupFolder">Choose Folder</label>
+                                <label class="custom-file-label" for="inputGroupFolder">{{uploadFolderBoxTitle}}</label>
                               </div>
                             </div>
                           </div>

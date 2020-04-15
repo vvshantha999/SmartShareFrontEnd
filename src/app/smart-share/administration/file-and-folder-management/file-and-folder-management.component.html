@@ -1,1 +1,22 @@
-<app-admin></app-admin>
+<div class="row">
+  <div class="col"></div>
+  <div class="col"></div>
+  <div class="col"></div>
+  <div class="col"></div>
+  <div class="col"></div>
+  <div class="col"></div>
+  <div class="col pr-4">
+    <mat-card *ngIf="perspectiveButton" align="center">
+      <mat-button-toggle-group #group="matButtonToggleGroup" (change)="changePerspective($event)" [value]="perspective"
+                               color="warn">
+        <mat-button-toggle matTooltip="Owner" value="owner">
+          <fa-icon [icon]="['fas', 'user-secret']" class="icon"></fa-icon>
+        </mat-button-toggle>
+        <mat-button-toggle matTooltip="User" value="user">
+          <fa-icon [icon]="['fas', 'user-tie']" class="icon"></fa-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </mat-card>
+  </div>
+</div>
+<app-admin (requestEmitter)="handleRequest($event)" [metadata]="metadata" [perspective]="perspective"></app-admin>

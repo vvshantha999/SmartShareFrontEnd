@@ -35,13 +35,24 @@ button:focus{
   align-items: center;
   justify-content: space-between;
   font-size: medium;
-  width:75% !important;
+  width: 75% !important;
   padding: .5rem 0.5rem;
   float: right;
 }
 
-.name-field{
+.name-field {
   text-transform: capitalize;
-  white-space: nowrap;
-  font-weight: bolder;
+  white-space: normal;
+  font-weight: bold;
+  font-size: small;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', sans-serif;
+}
+
+.name-div {
+  &:hover {
+    background: #d3d3d359;
+    border-radius: 18px;
+    transition-timing-function: ease-out;
+  }
+
 }

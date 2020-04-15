@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild, ViewEncapsulation} from '@angular/core';
 import * as d3 from 'd3';
 
 @Component({
@@ -7,8 +7,7 @@ import * as d3 from 'd3';
   templateUrl: './file-tree-list.component.html',
   styleUrls: ['./file-tree-list.component.less']
 })
-export class FileTreeListComponent implements OnInit {
-
+export class FileTreeListComponent implements OnChanges {
 
   @Input() data;
   // @ts-ignore
@@ -16,14 +15,15 @@ export class FileTreeListComponent implements OnInit {
   private fileTreeReference: ElementRef;
 
   @Output() selectedFileOrFolderEmitter = new EventEmitter();
-  @Output() lastModifiedEventEmitter = new EventEmitter();
-
 
   constructor() {
   }
 
-  ngOnInit() {
-    this.createChart();
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.data.length !== 0) {
+      this.createChart();
+    }
   }
 
   private createChart() {
@@ -31,14 +31,14 @@ export class FileTreeListComponent implements OnInit {
     const data = this.data;
     // @ts-ignore
     // tslint:disable-next-line:max-line-length
-    const fileStructureChart = this.treeList().eventEmitter(this.selectedFileOrFolderEmitter).lastModifiedEmitter(this.lastModifiedEventEmitter);
+    const fileStructureChart = this.treeList().eventEmitter(this.selectedFileOrFolderEmitter);
     d3.select(element).datum(data).call(fileStructureChart);
 
   }
 
   private treeList() {
     let margin = {top: 30, right: 20, bottom: 30, left: 30};
-    let width = 1000;
+    // let width = 1000;
     const barHeight = 20;
     let i = 0;
     const duration = 500;
@@ -52,17 +52,26 @@ export class FileTreeListComponent implements OnInit {
 
       const data = selection.datum();
       const root = d3.hierarchy(data);
-      const intialHeight = root.descendants().length * barHeight + margin.top + margin.bottom;
+      const initialHeight = root.descendants().length * barHeight + margin.top + margin.bottom;
+      const initialWidth = root.descendants().length * 2 * barHeight * 0.6 + margin.left + margin.right;
+      // const width = Math.max(500, nodes.length * barHeight + margin.left + margin.right);
+
 
       // Building svg
 
+      selection.selectAll('svg').remove();
       let svg = selection
         .selectAll('svg')
         .data([data])
-        .enter().append('svg').attr('height', intialHeight);
+        .enter().append('svg')
+        .attr('height', initialHeight)
+        .attr('width', initialWidth);
+
+      // removing on exit
+      svg.exit().remove();
 
       svg.append('g')
-        .attr('width', width)
+        // .attr('width', width)
         .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
       svg = svg.merge(svg);
@@ -161,17 +170,17 @@ export class FileTreeListComponent implements OnInit {
         nodeEnter
           .style('fill', (d) => {
             if (new Date(d.data.lastModified).toDateString() === new Date().toDateString()) {
-              return d3.interpolateHsl('red', 'blue')(getRandomInt(0, 1));
+              return 'red';
             }
           })
           .attr('stroke', (d) => {
             if (new Date(d.data.lastModified).toDateString() === new Date().toDateString()) {
-              return d3.interpolateHsl('blue', 'red')(getRandomInt(0, 1));
+              return 'yellow';
             }
           })
           .attr('stroke-width', (d) => {
             if (new Date(d.data.lastModified).toDateString() === new Date().toDateString()) {
-              return 0.5;
+              return 0.4;
             }
           });
 
@@ -187,8 +196,7 @@ export class FileTreeListComponent implements OnInit {
 
       // Toggle children on click.
       function click(d) {
-        eventEmitter.emit(d.data.name);
-        lastModifiedEmitter.emit(new Date(d.data.lastModified).toDateString());
+        eventEmitter.emit(d);
         // if (d.children) {
         //   d._children = d.children;
         //   d.children = null;
@@ -201,10 +209,10 @@ export class FileTreeListComponent implements OnInit {
       }
     }
 
-    // tslint:disable-next-line:only-arrow-functions
-    chart.width = function(_) {
-      return arguments.length ? ((width = _) , chart) : width;
-    };
+    // // tslint:disable-next-line:only-arrow-functions
+    // chart.width = function(_) {
+    //   return arguments.length ? ((width = _) , chart) : width;
+    // };
     // tslint:disable-next-line:only-arrow-functions
     chart.margin = function(_) {
       return arguments.length ? ((margin = _) , chart) : margin;

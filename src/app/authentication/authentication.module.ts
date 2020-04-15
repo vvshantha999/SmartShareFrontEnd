@@ -1,25 +1,28 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {SignUpComponent} from './sign-up/sign-up.component';
 import {RouterModule} from '@angular/router';
-import {SignInComponent} from './sign-in/sign-in.component';
 import {FormsModule} from '@angular/forms';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
-import {faAt, faCheck, faKey, fas, faUser} from '@fortawesome/free-solid-svg-icons';
-import {ConfirmPasswordValidator} from './sign-up/confirm-password-validator/confirm-password-validator.directive';
+import {faAt, faCheck, faKey, fas, faSignInAlt, faSignOutAlt, faUser} from '@fortawesome/free-solid-svg-icons';
+import {faGithub} from '@fortawesome/free-brands-svg-icons';
 import {HttpClientModule} from '@angular/common/http';
 import {ToastrModule} from 'ngx-toastr';
+import {Auth0Component} from './auth0/auth0.component';
+import {MatButtonModule} from '@angular/material';
+import {SigninRedirectCallbackComponent} from './auth0/signin-redirect-callback/signin-redirect-callback.component';
+import {SignoutRedirectCallbackComponent} from './auth0/signout-redirect-callback/signout-redirect-callback.component';
 
 
 @NgModule({
-  declarations: [SignUpComponent, SignInComponent, ConfirmPasswordValidator],
+  // tslint:disable-next-line:max-line-length
+  declarations: [Auth0Component, SigninRedirectCallbackComponent, SignoutRedirectCallbackComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
-      {path: 'signin', component: SignInComponent},
-      {path: 'signup', component: SignUpComponent},
-      {path: '', redirectTo: '/signin', pathMatch: 'full'}
+      {path: 'signin-callback', component: SigninRedirectCallbackComponent},
+      {path: 'signout-callback', component: SignoutRedirectCallbackComponent},
+      {path: '', redirectTo: '/dashboard', pathMatch: 'full'}
     ]),
     FormsModule,
     FontAwesomeModule,
@@ -29,11 +32,13 @@ import {ToastrModule} from 'ngx-toastr';
       positionClass: 'toast-top-right',
       preventDuplicates: true,
     }),
+    MatButtonModule,
   ]
 })
 export class AuthenticationModule {
   constructor() {
     library.add(fas);
-    library.add(faUser, faKey, faAt, faCheck);
+    library.add(faUser, faKey, faAt, faCheck, faSignInAlt, faSignOutAlt);
+    library.add(faGithub);
   }
 }

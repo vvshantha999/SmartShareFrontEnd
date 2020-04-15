@@ -1,6 +1,11 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
 import {AuthenticationService} from '../../authentication/authentication.service';
+import {Auth0ServiceService} from '../../authentication/auth0/auth0-service.service';
+import {User} from '../../smart-share/domain-models/User';
+import {FileServerService} from '../../smart-share/service/file-server.service';
+import {Subject} from 'rxjs';
+
 
 @Component({
   selector: 'app-menu-bar',
@@ -9,20 +14,39 @@ import {AuthenticationService} from '../../authentication/authentication.service
 })
 export class MenuBarComponent implements OnInit {
 
-  user: any;
+  user: User = null;
   bucketFilter: string;
-  listOfBuckets = ['First', 'Second', 'Third'];
-  // tslint:disable-next-line:variable-name
-  private _isThisBucketScreen = true;
+  listOfBuckets;
+  isLoggedIn = false;
   // tslint:disable-next-line:variable-name
   private _isThisFileExplorerScreen = false;
+  // tslint:disable-next-line:variable-name
+  private _isThisBucketScreen = false;
+  private fileExplorerScreenSubject = new Subject<boolean>();
   @Output() bucketNameToBeFilteredEmitter = new EventEmitter();
   selectedBucket = 'Choose Bucket';
   // tslint:disable-next-line:variable-name
   private _isThisRelationsScreen = false;
+  fileExplorerScreenChanged = this.fileExplorerScreenSubject.asObservable();
 
-  constructor(private router: Router, private auth: AuthenticationService) {
+  constructor(private router: Router, private auth: Auth0ServiceService, private authenticationService: AuthenticationService,
+              private fileServerService: FileServerService) {
+    this.auth.loginChanged.subscribe(value => {
+      this.isLoggedIn = value;
+    });
+    this.auth.userAssigned.subscribe(value => {
+      this.user = new User(value.profile.picture,
+        value.profile.name.split(' ')[0],
+        value.profile.email);
+    });
+    this.fileExplorerScreenChanged.subscribe(value => {
+      console.log('inside');
+      this.fileServerService.getBucketList(this.user._userName).subscribe(buckets => {
+        this.listOfBuckets = buckets;
+      });
+    });
   }
+
   get isThisBucketScreen() {
     return this._isThisBucketScreen;
   }
@@ -49,26 +73,42 @@ export class MenuBarComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.auth.role);
-    console.log(this.auth.userName);
-    this.user = {
-      role: this.auth.role,
-      name: this.auth.userName
-    };
+    this.auth.isLoggedIn().then(value => {
+      this.isLoggedIn = value;
+      if (this.isLoggedIn) {
+        this.authenticationService.registerUser(this.user).subscribe();
+      }
+    });
+    if (!!this.auth.getUser()) {
+      this.user = this.auth.getUser();
+    }
     // @ts-ignore
     this.router.events.subscribe((event: Event) => {
       (event instanceof NavigationEnd && event.url === '/dashboard/buckets') ?
-        this._isThisBucketScreen = true :  this._isThisBucketScreen = false;
-      (event instanceof NavigationEnd && event.url === '/dashboard/explorer') ?
-        this._isThisFileExplorerScreen = true :  this._isThisFileExplorerScreen = false;
+        this._isThisBucketScreen = true : this._isThisBucketScreen = false;
+      if (event instanceof NavigationEnd && event.url === '/dashboard/explorer') {
+        this._isThisFileExplorerScreen = true;
+        this.fileExplorerScreenSubject.next(true);
+      } else {
+        this._isThisFileExplorerScreen = false;
+      }
       (event instanceof NavigationEnd && event.url === '/dashboard/relationships') ?
         this._isThisRelationsScreen = true : this._isThisRelationsScreen = false;
     });
+
   }
 
   searchBucket() {
     const filter = this.isThisBucketScreen ? this.bucketFilter : this.selectedBucket;
     this.bucketNameToBeFilteredEmitter.emit(filter);
+  }
+
+  login() {
+    this.auth.login();
+  }
+
+  logout() {
+    this.auth.logout();
   }
 
 }

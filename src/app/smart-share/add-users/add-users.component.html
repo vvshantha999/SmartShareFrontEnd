@@ -28,14 +28,22 @@
           </div>
           <div class="col-6">
             <mat-card-header>
-              <mat-card-title>{{selectedBucket}}</mat-card-title>
+              <mat-card-title>{{matcardTitle}} &nbsp;</mat-card-title>
+              <div class="col select-dropdown">
+                <mat-select (ngModelChange)="onChange()" [(ngModel)]="selectedBucket" class="select">
+                  <!--                                    <mat-option class="empty-select" [value]="'Select Bucket'"> Select Bucket</mat-option>-->
+                  <mat-option *ngFor="let bucket of buckets" [value]="bucket.name">
+                    {{bucket.name}}
+                  </mat-option>
+                </mat-select>
+              </div>
             </mat-card-header>
             <div
               cdkDropList
-              [cdkDropListData]="bucket"
+              [cdkDropListData]="userManged"
               class="example-list "
               (cdkDropListDropped)="drop($event)">
-              <div class="example-box" *ngFor="let item of bucket" cdkDrag>
+              <div *ngFor="let item of userManged" cdkDrag class="example-box">
                 <div class="container-fluid">
                   <div class="row">
                     <div class="col-2">
@@ -53,8 +61,9 @@
       </div>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button class="mat-button-warning" [routerLink]="['/dashboard/buckets']">Cancel</button>
-      <button mat-button class="mat-button-primary">Add</button>
+      <button [routerLink]="['/dashboard/users']" color=warn mat-raised-button>Cancel</button>
+      <button (click)="addUsers()" class="mat-button-primary" mat-button>Add</button>
+      <button color=primary mat-raised-button>Remove</button>
     </mat-card-actions>
   </mat-card>
 

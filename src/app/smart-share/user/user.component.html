@@ -6,6 +6,7 @@
           <fa-icon [icon]="['fas', 'user']" class="icon"></fa-icon> &nbsp;<h5 class="user-label">{{user.name}}</h5>
         </div>
         <div class="col badge-wrapper">
+          <div class="row mt-3"></div>
           <div class="row">
             <button mat-flat-button color="warn" class="mat-button-buckets"
                     (click)="collapsableCardReference.toggleContent()" (click)="flowerChartComponent.createChart()">
@@ -17,15 +18,10 @@
               Bucket Requests&nbsp;<span class="badge badge-light">{{user.bucketRequests.count}}</span>
             </button>
           </div>
-          <div class="row">
-            <button mat-flat-button color="warn" class="mat-button-folder-file-requests">
-              Folder or File Requests &nbsp;<span class="badge badge-light">{{user.folderFileRequests.count}}</span>
-            </button>
-          </div>
         </div>
       </div>
       <div class="row" card-body>
-        <div class="container-fluid h-50">
+        <div class="container-fluid h-50 overflow">
           <mat-card>
             <app-flower-chart [data]="user.buckets.names" #flowerChartComponent></app-flower-chart>
           </mat-card>

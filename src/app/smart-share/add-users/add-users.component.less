@@ -86,9 +86,6 @@
   .mat-button(#9c27b0);
 }
 
-.mat-button-warning {
-  .mat-button(#ee514d);
-}
 
 .mat-card-actions {
   text-align: right;
@@ -98,3 +95,33 @@
   font-size: 1.5em;
   color: Tomato;
 }
+
+.select-dropdown {
+  text-align: center;
+  color: white;
+}
+
+.select {
+  font-size: large;
+  border-bottom: 0.1px solid white;
+}
+
+.mat-select-arrow {
+  color: white !important;
+}
+
+.not-empty-select.mat-selected {
+  color: white !important;
+}
+
+:host /deep/ .mat-select-value-text {
+  color: white !important;
+}
+
+button {
+  &:focus {
+    outline: none;
+    border: 0;
+  }
+}
+

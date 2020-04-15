@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {NavigationEnd, Router} from '@angular/router';
+
 
 @Component({
   selector: 'app-administration',
@@ -6,10 +8,47 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./administration.component.less']
 })
 export class AdministrationComponent implements OnInit {
+  margin: any;
 
-  constructor() { }
+  constructor(private router: Router) {
+    router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        if (val.url === '/dashboard/administration/bucket') {
+          this.margin = 'mt-5';
+        } else {
+          this.margin = 'mt-2';
+        }
+      }
+    });
+  }
 
   ngOnInit() {
+    // this.perspective = 'owner';
+    // // this.route.url.subscribe((url: UrlSegment[]) => {
+    //     if (url[0].parameters.filter) {
+    //       this.userNameFilter = url[0].parameters.filter;
+    //       this.applyFilter(this.userNameFilter);
+    //       this.applyFilter('He');
+    //       this.filteredData = this.dataSource.filteredData;
+    //       this.dataSource.data = this.filteredData;
+    //     } else {
+    //       this.dataSource.data = this.unfilteredData.data;
+    //     }
+    //   });
   }
+
+  //
+  // changePerspective(event: MatButtonToggleChange) {
+  //   this.perspective = event.value;
+  //   // this.fileAndFolderManagementComponent.perspective = this.perspective;
+  //   // FileAndFolderManagementComponent.prototype.perspective = this.perspective;
+  //   // console.log(this.childReference);
+  //   // this.childReference.perspective = this.perspective;
+  //   // console.log(FileAndFolderManagementComponent.prototype.perspective);
+  // }
+  // emitPerspectiveEvent(event) {
+  //   event.perspective = this.perspective;
+  // }
+
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-users-list',
@@ -16,22 +16,16 @@ export class UsersListComponent implements OnInit {
     },
     bucketRequests: {
       count: 8
-    },
-    folderFileRequests: {
-      count: 20
     }
   },
     {
       name: 'Jibin Xavier',
       buckets: {
         count: 15,
-        names: ['First Bucket', 'Second Bucket', 'Third Bucket', 'Fourth Bucket', 'Fifth Bucket','Sixth Bucket','Seventh Bucket']
+        names: ['First Bucket', 'Second Bucket', 'Third Bucket', 'Fourth Bucket', 'Fifth Bucket', 'Sixth Bucket', 'Seventh Bucket']
       },
       bucketRequests: {
         count: 10
-      },
-      folderFileRequests: {
-        count: 300
       }
     },
     {
@@ -42,9 +36,6 @@ export class UsersListComponent implements OnInit {
       },
       bucketRequests: {
         count: 130
-      },
-      folderFileRequests: {
-        count: 10
       }
     },
   ];

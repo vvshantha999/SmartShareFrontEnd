@@ -1,18 +1,31 @@
  <mat-card >
     <mat-card-header>
       <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>{{bucketName}}</mat-card-title>
+      <mat-card-title>{{bucket.name}}</mat-card-title>
+      <mat-card-subtitle *ngIf="perspective !== 'admin'">
+        <button color="accent" mat-button>Permission</button>
+        <mat-checkbox [(ngModel)]="readChecked" class="mr-2">Read</mat-checkbox>
+        <mat-checkbox [(ngModel)]="writeChecked" class="mr-2">Write</mat-checkbox>
+      </mat-card-subtitle>
     </mat-card-header>
     <mat-card-actions>
       <div class="container-fluid">
         <div class="row">
-          <div class="col-3"></div>
-          <div class="col-5">
-            <button *ngIf="admin"  mat-raised-button color="primary" [routerLink]="['/dashboard/addUsers',{bucketName: bucketName}]" >Add Users &nbsp; <fa-icon [icon]="['fas', 'users']"></fa-icon></button>
+          <div class="col-2"></div>
+          <div class="col-6">
+            <button *ngIf="perspective === 'admin'" [routerLink]="['/dashboard/addUsers',{bucketName: bucket.name}]"
+                    color="primary" mat-raised-button>Manage Users &nbsp;
+              <fa-icon [icon]="['fas', 'users']"></fa-icon>
+            </button>
           </div>
           <div class="col-4">
-            <button *ngIf="admin" mat-raised-button color="warn" >Delete &nbsp; <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon></button>
-            <button *ngIf="!admin" mat-raised-button color="warn" [routerLink]="['/dashboard/explorer',{bucketName: bucketName}]" >View &nbsp; <fa-icon [icon]="['fas', 'eye']" class="pull-right"></fa-icon></button>
+            <button *ngIf="perspective === 'admin'" color="warn" mat-raised-button>Delete &nbsp;
+              <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+            </button>
+            <button *ngIf="perspective !== 'admin'" [routerLink]="['/dashboard/explorer',{bucketName: bucket.name}]"
+                    color="warn" mat-raised-button>View &nbsp;
+              <fa-icon [icon]="['fas', 'eye']" class="pull-right"></fa-icon>
+            </button>
 
           </div>
         </div>

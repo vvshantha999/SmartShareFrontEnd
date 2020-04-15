@@ -12,12 +12,14 @@ import {
   MatCardModule,
   MatCheckboxModule,
   MatDialogModule,
+  MatIconModule,
   MatInputModule,
   MatPaginatorModule,
   MatSidenavModule,
   MatSortModule,
   MatTableModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatTooltipModule
 } from '@angular/material';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {FormsModule} from '@angular/forms';
@@ -68,7 +70,9 @@ import {UserTreeComponent} from './user-tree/user-tree.component';
     MatCheckboxModule,
     MatButtonModule,
     MatDialogModule,
-    MatSortModule
+    MatSortModule,
+    MatIconModule,
+    MatTooltipModule
   ]
 })
 export class CustomisedComponentsModule {

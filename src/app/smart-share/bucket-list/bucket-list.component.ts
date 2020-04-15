@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material';
+import {MatButtonToggleChange, MatDialog} from '@angular/material';
 import {DialogBoxComponent} from '../../customised-components/dialog-box/dialog-box.component';
 import {FileServerService} from '../service/file-server.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
+import {Auth0ServiceService} from '../../authentication/auth0/auth0-service.service';
 
 
 @Component({
@@ -11,25 +12,22 @@ import {Router} from '@angular/router';
   styleUrls: ['./bucket-list.component.less']
 })
 export class BucketListComponent implements OnInit {
-  bucketNames = ['Sample Bucket'];
-
-  constructor(public dialog: MatDialog, private fileServerService: FileServerService, private router: Router) {
-  }
+  buckets;
   filteredBuckets;
+  perspectiveButton; // default false
+  perspective: string;
 
-  ngOnInit() {
-    this.fileServerService.getBucketList().subscribe(result => {
-      console.log(result);
-      this.filteredBuckets = result;
-      },
-      error => {
-        if (error.error.status in [428, 412]) {
-          this.router.navigateByUrl('/signin');
-        }
-        console.log(error);
-        console.log(error.error.status);
-      });
-    console.log('test--1', this.filteredBuckets);
+  constructor(public dialog: MatDialog,
+              private fileServerService: FileServerService,
+              private oauth: Auth0ServiceService,
+              private route: ActivatedRoute) {
+    this.buckets = this.filteredBuckets = this.route.snapshot.data.buckets;
+  }
+
+  ngOnInit(): void {
+    this.perspectiveButton = this.oauth.isAdmin(); // have to implement
+    this.perspectiveButton ? this.perspective = 'admin' : this.perspective = 'user';
+
   }
 
   openDialog(): void {
@@ -39,18 +37,24 @@ export class BucketListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result.bucketName !==  null) {
-      this.bucketNames.push(result.bucketName);
+      if (result.bucketName !== null) {
+        this.buckets.push(result.bucketName);
       }
     });
   }
 
   filterBuckets(bucketFilter: string) {
     if (bucketFilter === '') {
-      this.filteredBuckets = this.bucketNames;
+      this.filteredBuckets = this.buckets;
     } else {
       bucketFilter = bucketFilter.toLowerCase();
-      this.filteredBuckets = this.filteredBuckets.filter((bucketName: string) => bucketName.toLowerCase().indexOf(bucketFilter) !== -1);
+      this.filteredBuckets = this.filteredBuckets.filter((bucket: any) => bucket.name.toLowerCase().indexOf(bucketFilter) !== -1);
     }
   }
+
+  changePerspective(event: MatButtonToggleChange) {
+    this.perspective = event.value;
+  }
+
+
 }

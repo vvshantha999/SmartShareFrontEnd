@@ -7,23 +7,31 @@
         </div>
       </li>
       <li class="sidebar-navigation">Navigation</li>
-      <li>
-        <a [routerLink]="['buckets']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"> <fa-icon [icon]="['fab', 'bitbucket']" class="icon"></fa-icon> &nbsp;Buckets</a>
+      <li *ngIf="isLoggedIn">
+        <a [routerLink]="['buckets']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+          <fa-icon [icon]="['fab', 'bitbucket']" class="icon"></fa-icon> &nbsp;Buckets</a>
       </li>
-      <li>
-        <a [routerLink]="['users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"> <fa-icon [icon]="['fas', 'users']" class="icon"></fa-icon> &nbsp;Users</a>
+      <li *ngIf="isLoggedIn">
+        <a [routerLink]="['users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+          <fa-icon [icon]="['fas', 'users']" class="icon"></fa-icon> &nbsp;Users</a>
       </li>
-      <li class="dropdown-custom">
-        <a>  <fa-icon [icon]="['fas', 'user-cog']" class="icon"></fa-icon> &nbsp;Administration</a>
+      <li *ngIf="isLoggedIn" class="dropdown-custom">
+        <a>
+          <fa-icon [icon]="['fas', 'user-cog']" class="icon"></fa-icon> &nbsp;Administration</a>
         <ul class="show" id="menu">
-          <li><a [routerLink]="['/dashboard/administration/bucket']" routerLinkActive="active"><fa-icon [icon]="['fab', 'bitbucket']" class="icon"></fa-icon> <small> &nbsp;Buckets</small></a></li>
-          <li><a [routerLink]="['/dashboard/administration/filesOrFolders']" routerLinkActive="active"><fa-icon [icon]="['fas', 'file-archive']" class="icon"></fa-icon> <small> &nbsp;Files & Folders</small></a></li>
-                  </ul>
+          <li><a [routerLink]="['/dashboard/administration/bucket']" routerLinkActive="active">
+            <fa-icon [icon]="['fab', 'bitbucket']" class="icon"></fa-icon>
+            <small> &nbsp;Buckets</small></a></li>
+          <li><a [routerLink]="['/dashboard/administration/filesOrFolders']" routerLinkActive="active">
+            <fa-icon [icon]="['fas', 'file-archive']" class="icon"></fa-icon>
+            <small> &nbsp;Files & Folders</small></a></li>
+        </ul>
       </li>
-      <li>
-        <a [routerLink]="['explorer']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"> <fa-icon [icon]="['fab', 'wpexplorer']" class="icon"></fa-icon> &nbsp;File Explorer</a>
+      <li *ngIf="isLoggedIn">
+        <a [routerLink]="['explorer']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+          <fa-icon [icon]="['fab', 'wpexplorer']" class="icon"></fa-icon> &nbsp;File Explorer</a>
       </li>
-      <li>
+      <li *ngIf="isLoggedIn">
         <a [routerLinkActiveOptions]="{exact:true}" [routerLink]="['relationships']" routerLinkActive="active">
           <fa-icon [icon]="['fas', 'project-diagram']" class="icon"></fa-icon> &nbsp;Relationships</a>
       </li>

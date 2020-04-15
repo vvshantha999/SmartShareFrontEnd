@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <script src="src/assets/js/oidc-client.min.js"></script>
+</head>
+<body>
+<script>
+  const auth0Settings = {
+    authority: Constants.domain,
+    client_id: Constants.clientId,
+    redirect_uri: `${Constants.clientRoot}signin-callback`,
+    scope: 'openid profile smartshare-user',
+    response_type: 'code',
+    metadata: {
+      issuer: 'https://smartshare.eu.auth0.com/',
+      authorization_endpoint: 'https://smartshare.eu.auth0.com/authorize?audience=smartshare-api',
+      jwks_uri: 'https://smartshare.eu.auth0.com/.well-known/jwks.json',
+      token_endpoint: 'https://smartshare.eu.auth0.com/oauth/token',
+      userinfo_endpoint: 'https://smartshare.eu.auth0.com/userinfo',
+      // tslint:disable-next-line:max-line-length
+      end_session_endpoint: `${Constants.domain}v2/logout?client_id=${Constants.clientId}&returnTo=${encodeURI(Constants.clientRoot)}signout-callback`
+    }
+  };
+  new Oidc.UserManager(auth0Settings).signinSilentCallback().catch(error => console.log(error));
+</script>
+</body>
+</html>

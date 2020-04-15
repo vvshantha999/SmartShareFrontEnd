@@ -1,8 +1,15 @@
 <div class="container-fluid overflow">
   <div class="row">
     <div class="col-6 user-card" *ngFor="let user of users">
-      <app-user [user] = user></app-user>
+      <app-user [user]=user></app-user>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button [routerLink]="['/dashboard/addUsers']" class="mine" color="accent" mat-fab matRipple
+              matTooltip="Manage Users">
+        <fa-icon [icon]="['fas', 'user-edit']" size="2x"></fa-icon>
+      </button>
     </div>
   </div>
 </div>
-
