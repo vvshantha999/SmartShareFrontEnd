@@ -30,7 +30,7 @@
     "angular-font-awesome": "^3.1.2",
     "angular-toastr": "^2.1.1",
     "auth0-js": "^9.12.2",
-    "bootstrap": "4.1.1",
+    "bootstrap": "4.3.1",
     "d3": "^5.9.7",
     "d3-3": "0.0.0",
     "file-saver": "^2.0.2",
