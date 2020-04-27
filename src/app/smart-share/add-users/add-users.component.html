@@ -12,14 +12,14 @@
               [cdkDropListData]="users"
               class="example-list"
               (cdkDropListDropped)="drop($event)">
-              <div class="example-box" *ngFor="let item of users" cdkDrag>
+              <div *ngFor="let user of users" cdkDrag class="example-box">
                 <div class="container-fluid">
                   <div class="row">
                     <div class="col-2">
                       <fa-icon [icon]="['fas', 'user']" class="icon"></fa-icon>
                     </div>
                     <div class="col">
-                      {{item}}
+                      {{user.userName}} <span class="card-subtitle"> &nbsp;[&nbsp; {{user.email}}&nbsp; ]</span>
                     </div>
                   </div>
                 </div>
@@ -43,14 +43,14 @@
               [cdkDropListData]="userManged"
               class="example-list "
               (cdkDropListDropped)="drop($event)">
-              <div *ngFor="let item of userManged" cdkDrag class="example-box">
+              <div *ngFor="let user of userManged" cdkDrag class="example-box">
                 <div class="container-fluid">
                   <div class="row">
                     <div class="col-2">
                       <fa-icon [icon]="['fas', 'user']" class="icon"></fa-icon>
                     </div>
                     <div class="col">
-                      {{item}}
+                      {{user.userName}} <span class="card-subtitle"> &nbsp;[&nbsp; {{user.email}}&nbsp; ]</span>
                     </div>
                   </div>
                 </div>
@@ -62,8 +62,8 @@
     </mat-card-content>
     <mat-card-actions>
       <button [routerLink]="['/dashboard/users']" color=warn mat-raised-button>Cancel</button>
-      <button (click)="addUsers()" class="mat-button-primary" mat-button>Add</button>
-      <button color=primary mat-raised-button>Remove</button>
+      <button (click)="addUsers()" class="mat-button-primary" mat-button matTooltip="Add Users">Add</button>
+      <button (click)="removeUser()" color=primary mat-raised-button matTooltip="Remove User">Remove</button>
     </mat-card-actions>
   </mat-card>
 

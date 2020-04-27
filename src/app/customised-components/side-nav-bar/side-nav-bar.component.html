@@ -11,7 +11,7 @@
         <a [routerLink]="['buckets']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
           <fa-icon [icon]="['fab', 'bitbucket']" class="icon"></fa-icon> &nbsp;Buckets</a>
       </li>
-      <li *ngIf="isLoggedIn">
+      <li *ngIf="isLoggedIn && isAdmin">
         <a [routerLink]="['users']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
           <fa-icon [icon]="['fas', 'users']" class="icon"></fa-icon> &nbsp;Users</a>
       </li>
@@ -19,7 +19,7 @@
         <a>
           <fa-icon [icon]="['fas', 'user-cog']" class="icon"></fa-icon> &nbsp;Administration</a>
         <ul class="show" id="menu">
-          <li><a [routerLink]="['/dashboard/administration/bucket']" routerLinkActive="active">
+          <li *ngIf="isAdmin"><a [routerLink]="['/dashboard/administration/bucket']" routerLinkActive="active">
             <fa-icon [icon]="['fab', 'bitbucket']" class="icon"></fa-icon>
             <small> &nbsp;Buckets</small></a></li>
           <li><a [routerLink]="['/dashboard/administration/filesOrFolders']" routerLinkActive="active">
@@ -48,6 +48,14 @@
       <span class="hamb-bottom"></span>
     </button>
     <router-outlet (activate)="onActivate($event)"></router-outlet>
+    <div *ngIf="!isLoggedIn" class="container-fluid">
+      <div class="foreground mt-5"></div>
+      <div class="midground mt-5">
+        <div class="tuna"></div>
+      </div>
+      <div class="background mt-5">
+      </div>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
 

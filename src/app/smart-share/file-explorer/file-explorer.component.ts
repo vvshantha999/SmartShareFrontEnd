@@ -21,8 +21,6 @@ export class FileExplorerComponent implements OnInit {
 
 
   bucketObjects;
-
-
   private selectedBucket: string;
   private uploadPanelOpenState = false;
   private fileManagerPanelOpenState = true;
@@ -318,6 +316,5 @@ export class FileExplorerComponent implements OnInit {
       }
     });
   }
+
 }
-
-

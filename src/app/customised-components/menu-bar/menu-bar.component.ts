@@ -41,7 +41,7 @@ export class MenuBarComponent implements OnInit {
     });
     this.fileExplorerScreenChanged.subscribe(value => {
       console.log('inside');
-      this.fileServerService.getBucketList(this.user._userName).subscribe(buckets => {
+      this.fileServerService.getBucketList(this.user._userName, this.user._emailAddress).subscribe(buckets => {
         this.listOfBuckets = buckets;
       });
     });
@@ -75,9 +75,6 @@ export class MenuBarComponent implements OnInit {
   ngOnInit() {
     this.auth.isLoggedIn().then(value => {
       this.isLoggedIn = value;
-      if (this.isLoggedIn) {
-        this.authenticationService.registerUser(this.user).subscribe();
-      }
     });
     if (!!this.auth.getUser()) {
       this.user = this.auth.getUser();

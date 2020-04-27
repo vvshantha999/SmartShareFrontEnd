@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Auth0ServiceService} from '../../authentication/auth0/auth0-service.service';
 import {Router} from '@angular/router';
 
@@ -7,13 +7,17 @@ import {Router} from '@angular/router';
   templateUrl: './side-nav-bar.component.html',
   styleUrls: ['./side-nav-bar.component.less']
 })
-export class SideNavBarComponent {
+export class SideNavBarComponent implements OnInit {
 
   isLoggedIn = false;
+  isAdmin: boolean;
 
   constructor(private router: Router, private auth: Auth0ServiceService) {
     this.auth.loginChanged.subscribe(value => {
       this.isLoggedIn = value;
+    });
+    this.auth.isAdminAssigned.subscribe(value => {
+      this.isAdmin = value;
     });
   }
 
@@ -26,5 +30,10 @@ export class SideNavBarComponent {
 
   filterBuckets(bucketFilter: string) {
     this.routeOutletComponentReference.filterBuckets(bucketFilter);
+  }
+
+  ngOnInit(): void {
+    this.isAdmin = this.auth.getAdminStatus();
+    console.log(this.isAdmin);
   }
 }

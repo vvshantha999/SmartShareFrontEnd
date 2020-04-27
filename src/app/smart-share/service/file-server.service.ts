@@ -18,9 +18,30 @@ export class FileServerService {
   constructor(private httpService: HttpClient) {
   }
 
-  getBucketList(userName) {
-    const getBucketListUrl = 'http://localhost:8081/coreserver/buckets/' + userName;
-    return this.httpService.get(getBucketListUrl);
+  getBucketList(userName, email) {
+    const getBucketListUrl = 'http://localhost:8081/coreserver/buckets';
+    const params = new HttpParams()
+      .set('userName', userName)
+      .set('email', email);
+    return this.httpService.get(getBucketListUrl, {params});
+  }
+
+  createBucket(body): Observable<any> {
+    console.log('Inside createBucket ', body);
+    const createBucketUrl = 'http://localhost:8081/coreserver/bucket';
+    return this.httpService.post<any>(createBucketUrl, body, this.httpOptions)
+      .pipe(
+        tap(data => {
+          console.log(data);
+        })
+      );
+  }
+
+  deleteBucket(bucketName) {
+    const deleteBucketUrl = 'http://localhost:8081/coreserver/bucket';
+    const params = new HttpParams()
+      .set('bucketName', bucketName);
+    return this.httpService.delete(deleteBucketUrl, {params});
   }
 
   getBucketObjects(userName, bucketName) {
@@ -41,7 +62,7 @@ export class FileServerService {
     const headers = new HttpHeaders({
       Return: 'resource'
     });
-    return this.httpService.get(downloadFileUrl, {headers, params, responseType: 'blob'},)
+    return this.httpService.get(downloadFileUrl, {headers, params, responseType: 'blob'})
       .subscribe(
         (response) => {
           // console.log(resp.headers.get('content-disposition'));

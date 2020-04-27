@@ -3,6 +3,8 @@ import {User, UserManager} from 'oidc-client';
 import {Constants} from './constant';
 import {Subject} from 'rxjs';
 import {User as UserModel} from '../../smart-share/domain-models/User';
+import {AuthenticationService} from '../authentication.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +13,18 @@ export class Auth0ServiceService {
 
   user: User = null;
   userModel: UserModel = null;
-  isAuthenticated;
   private userManager: UserManager;
   private accessToken;
   private loginChangedSubject = new Subject<boolean>();
+  private isAdminChangedSubject = new Subject<boolean>();
   loginChanged = this.loginChangedSubject.asObservable();
   private userAssignedSubject = new Subject<User>();
   userAssigned = this.userAssignedSubject.asObservable();
+  isAdminAssigned = this.isAdminChangedSubject.asObservable();
+  private isAdmin: boolean;
+  private userId;
 
-  constructor() {
+  constructor(private authService: AuthenticationService) {
     const auth0Settings = {
       authority: Constants.domain,
       client_id: Constants.clientId,
@@ -45,6 +50,12 @@ export class Auth0ServiceService {
     this.userAssigned.subscribe(value => {
       this.accessToken = value.access_token;
       this.userModel = new UserModel(value.profile.picture, value.profile.name.split(' ')[0], value.profile.email);
+      this.authService.registerUser(this.userModel).subscribe(registerUserResult => {
+        console.log(registerUserResult);
+        this.isAdminChangedSubject.next(registerUserResult.body.isAdmin);
+        this.isAdmin = registerUserResult.body.isAdmin;
+        this.userId = registerUserResult.body.registeredUser.userId;
+      });
     });
 
   }
@@ -92,13 +103,11 @@ export class Auth0ServiceService {
     return this.accessToken;
   }
 
-  isAdmin(): boolean {
-    return true;
+  getAdminStatus(): boolean {
+    return this.isAdmin;
   }
 
-  isUserAuthenticated() {
-    this.isLoggedIn().then(value => {
-      return value;
-    });
+  getUserId(): number {
+    return this.userId;
   }
 }

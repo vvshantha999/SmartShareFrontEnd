@@ -4,8 +4,10 @@
       <mat-card-title>{{bucket.name}}</mat-card-title>
       <mat-card-subtitle *ngIf="perspective !== 'admin'">
         <button color="accent" mat-button>Permission</button>
-        <mat-checkbox [(ngModel)]="readChecked" class="mr-2">Read</mat-checkbox>
-        <mat-checkbox [(ngModel)]="writeChecked" class="mr-2">Write</mat-checkbox>
+        <mat-checkbox (click)="createReadAccessRequest('read')" [(ngModel)]="readChecked" class="mr-2">Read
+        </mat-checkbox>
+        <mat-checkbox (click)="createWriteAccessRequest('write')" [(ngModel)]="writeChecked" class="mr-2">Write
+        </mat-checkbox>
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-actions>
@@ -19,7 +21,8 @@
             </button>
           </div>
           <div class="col-4">
-            <button *ngIf="perspective === 'admin'" color="warn" mat-raised-button>Delete &nbsp;
+            <button (click)="deleteBucket()" *ngIf="perspective === 'admin'" color="warn" mat-raised-button>Delete
+              &nbsp;
               <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
             </button>
             <button *ngIf="perspective !== 'admin'" [routerLink]="['/dashboard/explorer',{bucketName: bucket.name}]"

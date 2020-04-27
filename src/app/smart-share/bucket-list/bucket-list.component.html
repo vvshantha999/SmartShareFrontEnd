@@ -18,7 +18,7 @@
       <app-bucket [bucket]="bucket" [perspective]="this.perspective"></app-bucket>
     </div>
   </div>
-  <div class="row">
+  <div *ngIf="this.perspective == 'admin'" class="row">
     <div class="col">
       <button class="mine" mat-fab color="primary" (click)="openDialog()" matTooltip="Add bucket">
         <fa-icon [icon]="['fas', 'plus']"></fa-icon>

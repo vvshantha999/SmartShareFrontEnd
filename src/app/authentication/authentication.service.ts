@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs';
 import {User} from '../smart-share/domain-models/User';
-import {Status} from '../smart-share/domain-models/Status';
-import {tap} from 'rxjs/operators';
+import {RegisterUserResult} from '../smart-share/domain-models/RegisterUserResult';
 
 
 @Injectable({
@@ -18,15 +16,13 @@ export class AuthenticationService {
     observe: 'response'
   };
   private registerUrl = 'http://localhost:8081/administrationserver/register';
+  private isAdmin;
   constructor(private httpService: HttpClient) {
   }
 
-  registerUser(userInfo: User): Observable<Status> {
+  registerUser(userInfo: User) {
     // @ts-ignore
-    return this.httpService.post<any>(this.registerUrl, userInfo, this.httpOptions)
-      .pipe(
-        tap(data => console.log(data))
-      );
+    return this.httpService.post<RegisterUserResult>(this.registerUrl, userInfo, this.httpOptions);
   }
 
 }
