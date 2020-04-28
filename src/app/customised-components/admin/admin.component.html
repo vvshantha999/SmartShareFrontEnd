@@ -9,10 +9,10 @@
                 <fa-icon [icon]="['fas', 'check']" class="icon"></fa-icon>
               </div>
             </div>
-            <div (click)="applyFilter('accepted')" class="col-6 pointer-icon">
+            <div (click)="applyFilter('Approved')" class="col-6 pointer-icon">
               <mat-card-header>
                 <mat-card-subtitle>Accepted</mat-card-subtitle>
-                <mat-card-title> 55</mat-card-title>
+                <mat-card-title> {{acceptedCount}}</mat-card-title>
               </mat-card-header>
             </div>
           </div>
@@ -34,7 +34,7 @@
             <div (click)="applyFilter('rejected')" class="col-6 pointer-icon">
               <mat-card-header>
                 <mat-card-subtitle>Rejected</mat-card-subtitle>
-                <mat-card-title> 55</mat-card-title>
+                <mat-card-title> {{rejectedCount}}</mat-card-title>
               </mat-card-header>
             </div>
           </div>
@@ -53,10 +53,10 @@
                 <fa-icon [icon]="['fas', 'exclamation']" class="icon"></fa-icon>
               </div>
             </div>
-            <div (click)="applyFilter('pending')" class="col-6 pointer-icon">
+            <div (click)="applyFilter('In Progress')" class="col-6 pointer-icon">
               <mat-card-header>
                 <mat-card-subtitle>Pending</mat-card-subtitle>
-                <mat-card-title> 55</mat-card-title>
+                <mat-card-title> {{pendingCount}}</mat-card-title>
               </mat-card-header>
             </div>
           </div>
@@ -78,7 +78,7 @@
             <div (click)="applyFilter('total')" class="col-6 pointer-icon">
               <mat-card-header>
                 <mat-card-subtitle>Total</mat-card-subtitle>
-                <mat-card-title> 55</mat-card-title>
+                <mat-card-title> {{this.acceptedCount + this.rejectedCount + this.pendingCount}}</mat-card-title>
               </mat-card-header>
             </div>
           </div>
@@ -114,7 +114,7 @@
 
 
           <ng-container *ngFor="let column of filteredColumns" [matColumnDef]="column">
-            <th *matHeaderCellDef mat-header-cell> {{column}} </th>
+            <th *matHeaderCellDef mat-header-cell> {{column | titlecase}} </th>
             <td *matCellDef="let element" mat-cell> {{element[column]}} </td>
           </ng-container>
 

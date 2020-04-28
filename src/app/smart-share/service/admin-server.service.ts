@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {tap} from 'rxjs/operators';
 import {UsersMetadata} from '../domain-models/UsersMetadata';
+import {BucketAccessRequestDto} from '../domain-models/BucketAccessRequestDto';
 
 @Injectable({
   providedIn: 'root'
@@ -107,7 +108,40 @@ export class AdminServerService {
   }
 
   getBucketAccessRequestsAdmin() {
-    const getBucketAccessRequestsAdminUrl = 'http://localhost:8081/administrationserver/usersMetadata';
-    return this.httpService.get<any>(getBucketAccessRequestsAdminUrl);
+    const getBucketAccessRequestsAdminUrl = 'http://localhost:8081/administrationserver/bucket/bucketAccessRequestsForAdmin';
+    return this.httpService.get<BucketAccessRequestDto>(getBucketAccessRequestsAdminUrl);
+  }
+
+  approveBucketAccessRequestsAdmin(body) {
+    console.log(body);
+    const approveBucketAccessRequestsAdminUrl = 'http://localhost:8081/administrationserver/bucket/approveAccessRequest';
+    return this.httpService.post<boolean>(approveBucketAccessRequestsAdminUrl, body)
+      .pipe(
+        tap(data => {
+          console.log(data);
+        })
+      );
+  }
+
+  rejectBucketAccessRequestsAdmin(body) {
+    console.log(body);
+    const rejectBucketAccessRequestsAdminUrl = 'http://localhost:8081/administrationserver/bucket/rejectAccessRequest';
+    return this.httpService.post<boolean>(rejectBucketAccessRequestsAdminUrl, body)
+      .pipe(
+        tap(data => {
+          console.log(data);
+        })
+      );
+  }
+
+  deleteBucketAccessRequestsAdmin(body) {
+    console.log(body);
+    const deleteBucketAccessRequestsAdminUrl = 'http://localhost:8081/administrationserver/bucket/deleteAccessRequest';
+    return this.httpService.request('delete', deleteBucketAccessRequestsAdminUrl, {body})
+      .pipe(
+        tap(data => {
+          console.log(data);
+        })
+      );
   }
 }

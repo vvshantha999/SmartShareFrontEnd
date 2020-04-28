@@ -6,13 +6,6 @@ import {Request} from '../../smart-share/domain-models/Request';
 import {ToastrService} from 'ngx-toastr';
 
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
 export class Group {
   level = 0;
   parent: Group;
@@ -46,11 +39,14 @@ export class AdminComponent implements OnInit, OnChanges {
   filteredColumns;
   groupByColumns;
   selectedRows: any[] = [];
-  acceptButtonShow = true;
-  rejectButtonShow = true;
+  acceptButtonShow: boolean;
+  rejectButtonShow: boolean;
   deleteButtonShow = false;
   margin: any;
   private dataSourceFilter: string;
+  private pendingCount = 0;
+  private acceptedCount = 0;
+  private rejectedCount = 0;
 
   constructor(private route: ActivatedRoute, private toastr: ToastrService) {
     this.dataSource.paginator = this.paginator;
@@ -62,13 +58,21 @@ export class AdminComponent implements OnInit, OnChanges {
     this.unfilteredData = new MatTableDataSource<any>(this.metadata.data);
     this.groupByColumns = this.metadata.groupByColumns;
     this.filteredColumns = this.metadata.displayedColumns.filter(column => (column !== 'action') && (column !== 'select'));
-    this.dataSource.data = this.addGroups(this.metadata.data, this.groupByColumns);
+    this.dataSource.data = this.addGroups(this.metadata.data.filter(value => value.status === 'In Progress'), this.groupByColumns);
     this.dataSource.filterPredicate = this.customFilterPredicate.bind(this);
+    this.pendingCount = this.metadata.data.filter(value => value.status === 'In Progress').length;
+    this.acceptedCount = this.metadata.data.filter(value => value.status === 'Approved').length;
+    if (this.metadata.type === 'Bucket') {
+      this.acceptButtonShow = false;
+      this.rejectButtonShow = false;
+    } else {
+      this.acceptButtonShow = true;
+      this.rejectButtonShow = true;
+    }
   }
 
 
   ngOnInit() {
-    console.log(this.perspective);
     this.route.url.subscribe((url: UrlSegment[]) => {
       if (url[0].parameters.filter) {
         this.margin = 'mt-5';
@@ -170,6 +174,7 @@ export class AdminComponent implements OnInit, OnChanges {
 
 
   applyFilter(filterValue: string) {
+    console.log(filterValue);
     this.dataSourceFilter = filterValue;
     this.selectedRows = [];
     this.selection.clear();
@@ -180,23 +185,28 @@ export class AdminComponent implements OnInit, OnChanges {
         this.acceptButtonShow = false;
         this.rejectButtonShow = false;
         break;
-      case 'accepted':
-        this.dataSource.data = this.unfilteredData.data.filter(value => value.name === 'Hydrogen');
+      case 'Approved':
         this.deleteButtonShow = true;
         this.acceptButtonShow = false;
         this.rejectButtonShow = false;
+        this.dataSource.data = this.unfilteredData.data.filter(value => value.status === filterValue);
         break; // accepted
       case 'rejected':
-        this.dataSource.data = this.unfilteredData.data.filter(value => value.name === 'Lithium');
+        this.dataSource.data = this.unfilteredData.data.filter(value => value.status === filterValue);
         this.deleteButtonShow = true;
         this.acceptButtonShow = false;
         this.rejectButtonShow = false;
         break; // rejected
       default:
-        this.dataSource.data = this.addGroups(this.metadata.data, this.groupByColumns);
-        this.acceptButtonShow = true;
-        this.rejectButtonShow = true;
+        this.dataSource.data = this.addGroups(this.metadata.data.filter(value => value.status === filterValue), this.groupByColumns);
         this.deleteButtonShow = false;
+        if (this.metadata.type === 'Bucket') {
+          this.acceptButtonShow = false;
+          this.rejectButtonShow = false;
+        } else {
+          this.acceptButtonShow = true;
+          this.rejectButtonShow = true;
+        }
 
     }
   }
@@ -231,7 +241,7 @@ export class AdminComponent implements OnInit, OnChanges {
   }
 
   getDisplayedColumns(): string[] {
-    if (this.dataSourceFilter === 'accepted' || this.dataSourceFilter === 'rejected') {
+    if (this.dataSourceFilter === 'Approved' || this.dataSourceFilter === 'Rejected' || this.dataSourceFilter === 'total') {
       return this.metadata.displayedColumns
         .filter(col => col !== 'action');
     }
@@ -252,6 +262,7 @@ export class AdminComponent implements OnInit, OnChanges {
   }
 
   acceptRequest(row) {
+    console.log(row);
     const request = new Request();
     request.type = 'accept';
     request.content = row;
