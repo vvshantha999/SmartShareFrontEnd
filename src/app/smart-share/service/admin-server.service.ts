@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {tap} from 'rxjs/operators';
 import {UsersMetadata} from '../domain-models/UsersMetadata';
 import {BucketAccessRequestDto} from '../domain-models/BucketAccessRequestDto';
@@ -37,7 +37,7 @@ export class AdminServerService {
         }));
   }
 
-  approveAccessRequest(body) {
+  approveBucketObjectAccessRequest(body) {
     const approveAccessRequestUrl = 'http://localhost:8081/administrationserver/object/approveAccessRequest';
     return this.httpService.put<any>(approveAccessRequestUrl, body, this.httpOptions)
       .pipe(
@@ -47,7 +47,7 @@ export class AdminServerService {
       );
   }
 
-  rejectAccessRequest(body) {
+  rejectBucketObjectAccessRequest(body) {
     const rejectAccessRequestUrl = 'http://localhost:8081/administrationserver/object/rejectAccessRequest';
     return this.httpService.put<any>(rejectAccessRequestUrl, body, this.httpOptions)
       .pipe(
@@ -57,8 +57,8 @@ export class AdminServerService {
       );
   }
 
-  deleteAccessRequest(body) {
-    const deleteAccessRequestUrl = 'http://localhost:8081/administrationserver/object/rejectAccessRequest';
+  deleteBucketObjectAccessRequest(body) {
+    const deleteAccessRequestUrl = 'http://localhost:8081/administrationserver/object/deleteAccessRequest';
     return this.httpService.request('delete', deleteAccessRequestUrl, {body})
       .pipe(
         tap(data => {
@@ -107,6 +107,21 @@ export class AdminServerService {
       );
   }
 
+  getBucketObjectAccessRequestsAsUser(userId) {
+    const getBucketObjectAccessRequestsAsUserUrl = 'http://localhost:8081/administrationserver/accessRequestsCreatedByUser';
+    const params = new HttpParams()
+      .set('userId', userId);
+    return this.httpService.get<BucketAccessRequestDto>(getBucketObjectAccessRequestsAsUserUrl, {params});
+  }
+
+  getBucketObjectAccessRequestsAsOwner(ownerId) {
+    const getBucketObjectAccessRequestsAsOwnerUrl = 'http://localhost:8081/administrationserver/accessRequestsOfOwner';
+    const params = new HttpParams()
+      .set('ownerId', ownerId);
+    return this.httpService.get<BucketAccessRequestDto>(getBucketObjectAccessRequestsAsOwnerUrl, {params});
+
+  }
+
   getBucketAccessRequestsAdmin() {
     const getBucketAccessRequestsAdminUrl = 'http://localhost:8081/administrationserver/bucket/bucketAccessRequestsForAdmin';
     return this.httpService.get<BucketAccessRequestDto>(getBucketAccessRequestsAdminUrl);
@@ -144,4 +159,22 @@ export class AdminServerService {
         })
       );
   }
+
+  getFilesAccessedByUserInBucket(ownerId, bucketName) {
+    const getFilesAccessesByUserInBucketUrl = 'http://localhost:8081/administrationserver/listOfUsersAccessingOwnersObject';
+    const params = new HttpParams()
+      .set('ownerId', ownerId)
+      .set('bucketName', bucketName);
+    return this.httpService.get<any>(getFilesAccessesByUserInBucketUrl, {params});
+  }
+
+  getUsersFileAccessedByOthers(userId, bucketName) {
+    const getUsersFileAccessedByOthersUrl = 'http://localhost:8081/administrationserver/userFiles';
+    const params = new HttpParams()
+      .set('userId', userId)
+      .set('bucketName', bucketName);
+    return this.httpService.get<any>(getUsersFileAccessedByOthersUrl, {params});
+  }
+
+
 }

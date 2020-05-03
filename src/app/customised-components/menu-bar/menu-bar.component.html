@@ -34,7 +34,7 @@
         <div *ngIf="isLoggedIn" class="col-2 m-auto name-div">
           <img class="rounded-circle z-depth-2" height="30"
                src='{{user._picture}}'>
-          <span class="name-field p-2">{{user._userName}}</span>
+          <span class="name-field p-2">{{user._userName | emailToUsernamePipe}}</span>
         </div>
         <div class="col-1.5 m-auto p-2 ">
           <button (click)="login()" *ngIf="!isLoggedIn" class="float-right" color="warn" mat-raised-button>

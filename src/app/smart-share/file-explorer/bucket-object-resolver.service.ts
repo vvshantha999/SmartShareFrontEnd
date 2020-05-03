@@ -16,7 +16,7 @@ export class BucketObjectResolver implements Resolve<any> {
     if (route.paramMap.get('bucketName') === null) {
       return [];
     } else {
-      return this.fileService.getBucketObjects(this.oauth.getUser()._userName, route.paramMap.get('bucketName'));
+      return this.fileService.getBucketObjects(this.oauth.getUserId(), route.paramMap.get('bucketName'));
     }
   }
 }

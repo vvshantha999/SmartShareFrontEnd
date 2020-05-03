@@ -44,10 +44,10 @@ export class FileServerService {
     return this.httpService.delete(deleteBucketUrl, {params});
   }
 
-  getBucketObjects(userName, bucketName) {
+  getBucketObjects(userId, bucketName) {
     const getBucketListUrl = 'http://localhost:8081/coreserver/objects';
     const params = new HttpParams()
-      .set('userName', userName)
+      .set('userId', userId)
       .set('bucketName', bucketName);
     return this.httpService.get(getBucketListUrl, {params});
   }
@@ -87,13 +87,13 @@ export class FileServerService {
       );
   }
 
-  deleteFile(objectName, bucketName, ownerName): Observable<any> {
+  deleteFile(objectName, bucketName, ownerId): Observable<any> {
     console.log('inside');
     const deleteFileUrl = 'http://localhost:8081/coreserver/file';
     const params = new HttpParams()
       .set('objectName', objectName)
       .set('bucketName', bucketName)
-      .set('ownerName', ownerName);
+      .set('ownerId', ownerId);
     return this.httpService.delete(deleteFileUrl, {params});
   }
 

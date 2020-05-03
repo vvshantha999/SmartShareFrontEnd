@@ -26,6 +26,7 @@ import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {OwnerTreeComponent} from './owner-tree/owner-tree.component';
 import {UserTreeComponent} from './user-tree/user-tree.component';
+import {EmailToUsernamePipePipe} from './menu-bar/email-to-username-pipe.pipe';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import {UserTreeComponent} from './user-tree/user-tree.component';
     FlowerChartComponent,
     FileTreeListComponent,
     OwnerTreeComponent,
-    UserTreeComponent
+    UserTreeComponent,
+    EmailToUsernamePipePipe
   ],
   exports: [
     AdminComponent,

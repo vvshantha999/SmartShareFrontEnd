@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import * as d3 from 'd3';
 
 @Component({
@@ -6,7 +6,7 @@ import * as d3 from 'd3';
   templateUrl: './user-tree.component.html',
   styleUrls: ['./user-tree.component.less']
 })
-export class UserTreeComponent implements OnInit {
+export class UserTreeComponent implements OnChanges {
 
   @Input() data;
   @Input() width;
@@ -14,238 +14,14 @@ export class UserTreeComponent implements OnInit {
   // @ts-ignore
   @ViewChild('userTree')
   private userTreeElementReference: ElementRef;
-  private testData = {
-    name: 'root',
-    children: [
-      {
-        name: 'folder/',
-        children: [
-          {
-            name: 'subfolder1/saplie1.txt',
-            children: [
-              {name: 'Read'},
-              {name: 'Write'},
-              {name: 'Delete'}
-            ]
-          }, {
-            name: 'subfolder1/saplie3.txt',
-            children: [
-              {name: 'Read'},
-              {name: 'Write'},
-              {name: 'Delete'}
-            ]
-          },
-          {
-            name: 'subfolder12/saplie_without_access.txt'
-          },
-          {
-            name: 'subfolder1/saplie2.txt',
-            children: [
-              {name: 'Read'},
-              {name: 'Delete'}
-            ]
-          },
-          {
-            name: 'subfolder1/',
-            children: [
-              {
-                name: 'subfolder11/saplie1.txt',
-                children: [
-                  {name: 'Delete'},
-                  {name: 'Write'}
-                ]
-              },
-              {
-                name: 'subfolder12/saplie2.txt',
-                children: [
-                  {name: 'Delete'},
-                  {name: 'Write'}
-                ]
-              },
-              {
-                name: 'subfolder12/saplie_without_access.txt'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        name: 'folder2/',
-        children: [
-          {
-            name: 'subfolder2/saplie1.txt',
-            children: [
-              {name: 'Read'},
-              {name: 'Write'}
-            ]
-          },
-          {
-            name: 'subfolder23/saplie_without_access.txt'
-          },
-          {
-            name: 'subfolder2/saplie2.txt',
-            children: [
-              {name: 'Read'},
-              {name: 'Delete'}
-            ]
-          },
-          {
-            name: 'subfolder2/',
-            children: [
-              {
-                name: 'subfolder21/saplie1.txt',
-                children: [
-                  {name: 'Delete'},
-                  {name: 'Write'}
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        name: 'folder3/',
-        children: [
-          {
-            name: 'subfolder3/saplie1.txt',
-            children: [
-              {name: 'Read'},
-              {name: 'Write'}
-            ]
-          },
-          {
-            name: 'subfolder3/saplie2.txt',
-            children: [
-              {name: 'Read'},
-              {name: 'Delete'}
-            ]
-          },
-          {
-            name: 'subfolder3/',
-            children: [
-              {
-                name: 'subfolder31/saplie1.txt',
-                children: [
-                  {name: 'Delete'},
-                  {name: 'Write'}
-                ]
-              },
-              {
-                name: 'subfolder32/saplie_without_access.txt'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        name: 'folder4/',
-        children: [
-          {
-            name: 'subfolder4/saplie1.txt',
-            children: [
-              {name: 'Read'},
-              {name: 'Write'}
-            ]
-          },
-          {
-            name: 'subfolder4/saplie2.txt',
-            children: [
-              {name: 'Read'},
-              {name: 'Delete'}
-            ]
-          },
-          {
-            name: 'subfolder4/',
-            children: [
-              {
-                name: 'subfolder41/saplie1.txt',
-                children: [
-                  {name: 'Delete'},
-                  {name: 'Write'}
-                ]
-              },
-              {
-                name: 'subfolder42/saplie_without_access.txt'
-              }
-            ]
-          },
-          {
-            name: 'subfolder42/',
-            children: [
-              {
-                name: 'subfolder421/saplie1.txt',
-                children: [
-                  {name: 'Delete'},
-                  {name: 'Write'}
-                ]
-              },
-              {
-                name: 'subfolder422/saplie_without_access.txt'
-              }
-            ]
-          }
-        ]
-      }, {
-        name: 'folder5/',
-        children: [
-          {
-            name: 'subfolder5/saplie1.txt',
-            children: [
-              {name: 'Read'},
-              {name: 'Write'}
-            ]
-          },
-          {
-            name: 'subfolder5/saplie2.txt',
-            children: [
-              {name: 'Read'},
-              {name: 'Delete'}
-            ]
-          },
-          {
-            name: 'subfolder5/',
-            children: [
-              {
-                name: 'subfolder51/saplie1.txt',
-                children: [
-                  {name: 'Delete'},
-                  {name: 'Write'}
-                ]
-              },
-              {
-                name: 'subfolder52/saplie_without_access.txt'
-              }
-            ]
-          },
-          {
-            name: 'subfolder52/',
-            children: [
-              {
-                name: 'subfolder521/saplie1.txt',
-                children: [
-                  {name: 'Delete'},
-                  {name: 'Write'}
-                ]
-              },
-              {
-                name: 'subfolder522/saplie_without_access.txt'
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  };
-
 
   constructor() {
   }
 
-  ngOnInit() {
-    this.data = this.testData;
-    console.log(this.width);
-    console.log(this.height);
-    this.createChart();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.data.length !== 0) {
+      this.createChart();
+    }
   }
 
   private createChart() {
@@ -369,7 +145,7 @@ export class UserTreeComponent implements OnInit {
               '<div class=\'col\'>Bucket:</div>' +
               '<div class=\'col\'>' + d.data.name + '</div>';
           }
-          return '<div class=\'card bg-dark\'>' + '<div class=\'card-body\'>' +
+          return '<div class=\'card bg-dark opacity-1\'>' + '<div class=\'card-body\'>' +
             '<div class = \'row\'>' +
             innerColumns +
             '</div>' +

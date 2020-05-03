@@ -8,6 +8,8 @@ import {ToastrService} from 'ngx-toastr';
 
 export class Group {
   level = 0;
+  id: number;
+  row: any;
   parent: Group;
   expanded = true;
 
@@ -47,6 +49,7 @@ export class AdminComponent implements OnInit, OnChanges {
   private pendingCount = 0;
   private acceptedCount = 0;
   private rejectedCount = 0;
+  private totalCount = 0;
 
   constructor(private route: ActivatedRoute, private toastr: ToastrService) {
     this.dataSource.paginator = this.paginator;
@@ -58,11 +61,16 @@ export class AdminComponent implements OnInit, OnChanges {
     this.unfilteredData = new MatTableDataSource<any>(this.metadata.data);
     this.groupByColumns = this.metadata.groupByColumns;
     this.filteredColumns = this.metadata.displayedColumns.filter(column => (column !== 'action') && (column !== 'select'));
-    this.dataSource.data = this.addGroups(this.metadata.data.filter(value => value.status === 'In Progress'), this.groupByColumns);
-    this.dataSource.filterPredicate = this.customFilterPredicate.bind(this);
+    const dataSource = this.addGroups(this.metadata.data.filter(value => value.status === 'In Progress'), this.groupByColumns);
+    this.dataSource.data = (dataSource.length === 1) ? [] : dataSource;
+    this.totalCount = this.metadata.data.length;
+    console.log(this.dataSource.data);
+    // tslint:disable-next-line:max-line-length
+    this.dataSource.filterPredicate = (this.metadata.type === 'Bucket') ? this.customFilterPredicate.bind(this) : this.customFilterPredicateBucketObject.bind(this);
     this.pendingCount = this.metadata.data.filter(value => value.status === 'In Progress').length;
     this.acceptedCount = this.metadata.data.filter(value => value.status === 'Approved').length;
-    if (this.metadata.type === 'Bucket') {
+    this.rejectedCount = this.metadata.data.filter(value => value.status === 'Rejected').length;
+    if (this.metadata.type === 'Bucket' || this.perspective === 'user') {
       this.acceptButtonShow = false;
       this.rejectButtonShow = false;
     } else {
@@ -79,14 +87,23 @@ export class AdminComponent implements OnInit, OnChanges {
         this.userNameFilter = url[0].parameters.filter;
         this.applyFilter(this.userNameFilter);  // have to change the code with parameter according to retrieved data in below filter
         this.dataSource.data = this.addGroups(this.metadata.data.filter(value => value.symbol === 'Ne'), this.groupByColumns);
+        console.log(this.dataSource.data);
       }
     });
   }
 
   groupHeaderClick(row) {
-    console.log(row);
     row.expanded = !row.expanded;
-    this.dataSource.filter = performance.now().toString();  // hack to trigger filter refresh
+    this.dataSource.filter = (this.metadata.type === 'Bucket') ? performance.now().toString() : row;
+  }
+
+  customFilterPredicateBucketObject(data: any, filter: string): boolean {
+    // console.log(data.expanded);
+    // if (data instanceof Group ) {return  true; }
+    // if ( !(data instanceof Group) && data.parentId === filter['id']) {
+    //   return false;
+    // }
+    return true;
   }
 
   isGroup(index, item): boolean {
@@ -101,44 +118,110 @@ export class AdminComponent implements OnInit, OnChanges {
     });
   }
 
-  getSublevel(data: any[], level: number, groupByColumns: string[], parent: Group): any[] {
-    // Recursive function, stop when there are no more levels.
-    if (level >= groupByColumns.length) {
-      return data;
-    }
-
-    const groups = this.uniqueBy(
-      data.map(
-        row => {
-          const result = new Group();
-          result.level = level + 1;
-          result.parent = parent;
-          for (let i = 0; i <= level; i++) {
-            result[groupByColumns[i]] = row[groupByColumns[i]];
-          }
-          return result;
-        }
-      ),
-      JSON.stringify);
-
-    const currentColumn = groupByColumns[level];
-
-    let subGroups = [];
-    groups.forEach(group => {
-      const rowsInGroup = data.filter(row => group[currentColumn] === row[currentColumn]);
-      const subGroup = this.getSublevel(rowsInGroup, level + 1, groupByColumns, group);
-      subGroup.unshift(group);
-      subGroups = subGroups.concat(subGroup);
-    });
-    return subGroups;
-  }
-
   addGroups(data: any[], groupByColumns: string[]): any[] {
     const rootGroup = new Group();
     return this.getSublevel(data, 0, groupByColumns, rootGroup);
   }
 
-  getDataRowVisible(data: any): boolean {
+  getSublevel(data: any[], level: number, groupByColumns: string[], parent: Group): any[] {
+    // Recursive function, stop when there are no more levels.
+    if (level >= groupByColumns.length) {
+      return data;
+    }
+    let groups = [];
+    if (this.metadata.type !== 'Bucket') {
+      const groupNames = [];
+      groups = data.map(
+        (row, index) => {
+          if (row[groupByColumns[0]].endsWith('/')) {
+            const result = new Group();
+            result.level = level + 1;
+            result.parent = parent;
+            result.id = index;
+            result.row = row;
+            result[groupByColumns[0]] = row[groupByColumns[0]];
+            groupNames.push(row.bucketObjectName);
+            console.log(result);
+            return result;
+          }
+        })
+        .filter(value => value !== undefined);
+
+      data.forEach(value => {
+        const exists = [];
+        groupNames.forEach(groupName => {
+          exists.push(value.bucketObjectName.startsWith(groupName));
+        });
+        const evaluate = exists.reduce((previousValue, currentValue) => previousValue || currentValue);
+        if (evaluate === false) {
+          const result = new Group();
+          result.level = level + 1;
+          result.parent = parent;
+          result[groupByColumns[0]] = 'Files';
+          groups.push(result);
+        }
+      });
+      groups = [...new Map(groups.map(item => [item.bucketObjectName, item])).values()];
+      console.log(groups);
+    } else {
+      groups = this.uniqueBy(
+        data.map(
+          (row, index) => {
+            const result = new Group();
+            result.level = level + 1;
+            result.id = index;
+            result.parent = parent;
+            for (let i = 0; i <= level; i++) {
+              result[groupByColumns[i]] = row[groupByColumns[i]];
+            }
+            console.log(result);
+            return result;
+          }
+        ),
+        JSON.stringify);
+    }
+    console.log(groups);
+    console.log(data);
+    const currentColumn = groupByColumns[level];
+    let subGroups = [];
+    if (this.metadata.type !== 'Bucket') {
+      for (let i = 0; i <= groups.length - 1; i++) {
+        console.log(groups[i][currentColumn]);
+        let rowsInGroup = [];
+        if (i + 1 < groups.length) {
+          rowsInGroup = data.filter(row => {
+            return row[currentColumn].startsWith(groups[i][currentColumn]) &&
+              !row[currentColumn].startsWith(groups[i + 1][currentColumn]);
+          });
+          rowsInGroup.forEach(value => value.parentId = groups[i].id);
+        } else {
+          rowsInGroup = data.filter(row => {
+            return row[currentColumn].startsWith(groups[i][currentColumn]);
+          });
+          rowsInGroup.forEach(value => value.parentId = groups[i].id);
+        }
+        if (groups[i][currentColumn] === 'Files') {
+          rowsInGroup = data.filter(row => {
+            return !row[currentColumn].endsWith('/') && row.parentId === undefined;
+          });
+        }
+        rowsInGroup = rowsInGroup.filter(value => value[currentColumn] !== groups[i][currentColumn]);
+        rowsInGroup.unshift(groups[i]);
+        subGroups = subGroups.concat(rowsInGroup);
+      }
+      return subGroups;
+    } else {
+      groups.forEach(group => {
+        const rowsInGroup = data.filter(row => group[currentColumn] === row[currentColumn]);
+        const subGroup = this.getSublevel(rowsInGroup, level + 1, groupByColumns, group);
+        subGroup.unshift(group);
+        subGroups = subGroups.concat(subGroup);
+      });
+      return subGroups;
+    }
+  }
+
+  getDataRowVisible(data: any) {
     const groupRows = this.dataSource.data.filter(
       row => {
         if (!(row instanceof Group)) {
@@ -168,7 +251,7 @@ export class AdminComponent implements OnInit, OnChanges {
     return parent.visible && parent.expanded;
   }
 
-  customFilterPredicate(data: any | Group, filter: string): boolean {
+  customFilterPredicate(data: any): boolean {
     return (data instanceof Group) ? data.visible : this.getDataRowVisible(data);
   }
 
@@ -191,7 +274,7 @@ export class AdminComponent implements OnInit, OnChanges {
         this.rejectButtonShow = false;
         this.dataSource.data = this.unfilteredData.data.filter(value => value.status === filterValue);
         break; // accepted
-      case 'rejected':
+      case 'Rejected':
         this.dataSource.data = this.unfilteredData.data.filter(value => value.status === filterValue);
         this.deleteButtonShow = true;
         this.acceptButtonShow = false;
@@ -200,7 +283,7 @@ export class AdminComponent implements OnInit, OnChanges {
       default:
         this.dataSource.data = this.addGroups(this.metadata.data.filter(value => value.status === filterValue), this.groupByColumns);
         this.deleteButtonShow = false;
-        if (this.metadata.type === 'Bucket') {
+        if (this.metadata.type === 'Bucket' || this.perspective === 'user') {
           this.acceptButtonShow = false;
           this.rejectButtonShow = false;
         } else {
@@ -252,8 +335,9 @@ export class AdminComponent implements OnInit, OnChanges {
   }
 
   selectGroupChildren(event: MatCheckboxChange, group: any) {
-    const children = this.dataSource.data.filter((value) => !(value instanceof Group) && value.name === group.name);
-    this.selectedRows.push(group as any);
+    console.log(group);
+    const children = this.dataSource.data.filter((value) => !(value instanceof Group) && value.parentId === group.id);
+    this.selectedRows.push((this.metadata.type === 'Bucket') ? group as any : group.row as any);
     children.forEach(row => {
       this.selectedRows.push(row as any);
       // tslint:disable-next-line:max-line-length
@@ -265,14 +349,14 @@ export class AdminComponent implements OnInit, OnChanges {
     console.log(row);
     const request = new Request();
     request.type = 'accept';
-    request.content = row;
+    request.content = [row];
     this.requestEmitter.emit(request);
   }
 
   rejectRequest(row) {
     const request = new Request();
     request.type = 'reject';
-    request.content = row;
+    request.content = [row];
     this.requestEmitter.emit(request);
   }
 
@@ -287,7 +371,25 @@ export class AdminComponent implements OnInit, OnChanges {
     }
   }
 
-
+  addInSelectedFiles(event, row) {
+    console.log(event);
+    console.log(row);
+    if (event.checked) {
+      let exists = false;
+      this.selectedRows.forEach(value => {
+        if (value.bucketObjectName === row.bucketObjectName) {
+          exists = true;
+        }
+      });
+      if (exists === false) {
+        console.log('pushed');
+        this.selectedRows.push(row);
+      }
+    } else {
+      console.log('removed');
+      this.selectedRows = this.selectedRows.filter(value => value.bucketObjectName !== row.bucketObjectName);
+    }
+  }
 }
 
 

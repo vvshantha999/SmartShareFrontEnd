@@ -31,7 +31,7 @@
                 <fa-icon [icon]="['fas', 'times']" class="icon"></fa-icon>
               </div>
             </div>
-            <div (click)="applyFilter('rejected')" class="col-6 pointer-icon">
+            <div (click)="applyFilter('Rejected')" class="col-6 pointer-icon">
               <mat-card-header>
                 <mat-card-subtitle>Rejected</mat-card-subtitle>
                 <mat-card-title> {{rejectedCount}}</mat-card-title>
@@ -78,7 +78,7 @@
             <div (click)="applyFilter('total')" class="col-6 pointer-icon">
               <mat-card-header>
                 <mat-card-subtitle>Total</mat-card-subtitle>
-                <mat-card-title> {{this.acceptedCount + this.rejectedCount + this.pendingCount}}</mat-card-title>
+                <mat-card-title> {{this.totalCount}}</mat-card-title>
               </mat-card-header>
             </div>
           </div>
@@ -96,7 +96,7 @@
         <table [dataSource]="dataSource" mat-table matSort>
 
           <ng-container matColumnDef="select">
-            <th *matHeaderCellDef mat-header-cell>
+            <th *matHeaderCellDef mat-column-select mat-header-cell>
               <mat-checkbox (change)="$event ? masterToggle() : null"
                             [aria-label]="checkboxLabel()"
                             [checked]="selection.hasValue() && isAllSelected()"
@@ -105,6 +105,7 @@
             </th>
             <td *matCellDef="let row" mat-cell>
               <mat-checkbox (change)="$event ? selection.toggle(row) : null"
+                            (change)="addInSelectedFiles($event , row)"
                             (click)="$event.stopPropagation()"
                             [aria-label]="checkboxLabel(row)"
                             [checked]="selection.isSelected(row)" color="warn">
@@ -120,9 +121,9 @@
 
           <!-- Action Column -->
           <ng-container matColumnDef="action">
-            <th *matHeaderCellDef mat-header-cell> Action</th>
+            <th *matHeaderCellDef mat-header-cell> &nbsp;&nbsp;&nbsp;Action</th>
             <td *matCellDef="let row" mat-cell>
-              <div class="container-fluid pl-0">
+              <div class="container-fluid">
                 <div class="row">
                   <div class="col-6">
                     <button (click)="acceptRequest(row)" color="primary" mat-mini-fab
@@ -159,9 +160,9 @@
                     <fa-icon *ngIf="group.expanded" [icon]="['fas', 'chevron-down']" class="pl-3"></fa-icon>
                     <fa-icon *ngIf="!group.expanded" [icon]="['fas', 'chevron-right']" class="pl-3"></fa-icon>
                   </div>
-                  <div class="col-3">
-                    <button color="warn" mat-button>{{groupByColumns[group.level - 1] | titlecase}}:</button>
-                    <button color="primary" mat-stroked-button>{{group[groupByColumns[group.level - 1]]}}</button>
+                  <div class="col">
+                    <button color="warn" mat-stroked-button>{{groupByColumns[group.level - 1] | titlecase}}:</button>
+                    <button color="primary" mat-button>{{group[groupByColumns[group.level - 1]]}}</button>
                   </div>
                 </div>
               </mat-card-subtitle>

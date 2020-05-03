@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import * as d3 from 'd3';
 
 @Component({
@@ -6,7 +6,7 @@ import * as d3 from 'd3';
   templateUrl: './owner-tree.component.html',
   styleUrls: ['./owner-tree.component.less']
 })
-export class OwnerTreeComponent implements OnInit {
+export class OwnerTreeComponent implements OnChanges {
 
   @Input() data;
   @Input() width;
@@ -15,102 +15,13 @@ export class OwnerTreeComponent implements OnInit {
   @ViewChild('ownerTree')
   private ownerTreeElementReference: ElementRef;
 
-  private testData = {
-    name: 'bucket975351',
-    owner: '',
-    accessInfo: null,
-    completeName: '/',
-    lastModified: null,
-    children: [
-      {
-        name: 'sar.jpeg',
-        owner: '',
-        user: 'sethuram',
-        accessInfo: null,
-        completeName: '18228016.jpeg',
-        lastModified: 'Apr 2, 2020, 5:18:10 AM'
-      },
-      {
-        name: '18228016.jpeg',
-        owner: '',
-        user: 'sethuram',
-        accessInfo: null,
-        completeName: 'test5/18228016.jpeg',
-        lastModified: 'Apr 6, 2020, 8:30:13 PM'
-      },
-      {
-        name: 'sample.pdf',
-        owner: '',
-        accessInfo: null,
-        completeName: 'sample.pdf',
-        lastModified: 'Mar 7, 2020, 11:49:30 PM'
-      },
-      {
-        name: 'sample',
-        owner: '',
-        accessInfo: null,
-        completeName: 'sample/',
-        lastModified: null,
-        children: [
-          {
-            name: 'ibm-blockchain_second-edition_final_XIM12354USEN.pdf',
-            owner: '',
-            accessInfo: null,
-            completeName: 'sample/ibm-blockchain_second-edition_final_XIM12354USEN.pdf',
-            lastModified: 'Apr 6, 2020, 8:26:25 PM'
-          }
-        ]
-      },
-      {
-        name: 'test5',
-        owner: '',
-        accessInfo: null,
-        completeName: 'test5/',
-        lastModified: null,
-        children: [
-          {
-            name: '18228016.jpeg',
-            owner: '',
-            user: 'sethuram',
-            accessInfo: null,
-            completeName: 'test5/18228016.jpeg',
-            lastModified: 'Apr 6, 2020, 8:30:13 PM'
-          },
-          {
-            name: '18228016.jpeg',
-            owner: '',
-            user: 'ramu',
-            accessInfo: null,
-            completeName: 'test5/18228016.jpeg',
-            lastModified: 'Apr 6, 2020, 8:30:13 PM'
-          },
-          {
-            name: '18228016.jpeg',
-            owner: '',
-            user: 'reddy',
-            accessInfo: null,
-            completeName: 'test5/18228016.jpeg',
-            lastModified: 'Apr 6, 2020, 8:30:13 PM'
-          },
-          {
-            name: 'ibm-blockchain_second-edition_final_XIM12354USEN.pdf',
-            owner: '',
-            accessInfo: null,
-            completeName: 'sample/ibm-blockchain_second-edition_final_XIM12354USEN.pdf',
-            lastModified: 'Apr 6, 2020, 8:26:25 PM'
-          }
-        ]
-      }
-    ]
-  };
-
-
   constructor() {
   }
 
-  ngOnInit() {
-    this.data = this.testData;
-    this.createChart();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.data.length !== 0) {
+      this.createChart();
+    }
   }
 
   public createChart() {
@@ -177,10 +88,10 @@ export class OwnerTreeComponent implements OnInit {
           if (d.children) {
             innerTableContent =
               '<tr>' +
-              '<th scope=\'row\'>Owner :</th>' + '<td>' + d.data.owner + '</td>' +
+              '<th scope=\'row\'>Folder :</th>' + '<td>' + d.data.name + '</td>' +
               '</tr>' +
               '<tr>' +
-              '<th scope=\'row\'>Folder :</th>' + '<td>' + d.data.completeName + '</td>' +
+              '<th scope=\'row\'>Owner :</th>' + '<td>' + d.data.owner + '</td>' +
               '</tr>';
 
           } else {
@@ -195,7 +106,7 @@ export class OwnerTreeComponent implements OnInit {
               '<th scope=\'row\'>Access Given :</th>' + '<td>' + d.data.accessInfo + '</td>' +
               '</tr>';
           }
-          return '<div class=\'card bg-dark\'>' + '<div class=\'card-body\'>' +
+          return '<div class=\'card bg-dark opacity-1\'>' + '<div class=\'card-body\'>' +
             '<table class=\'table table-striped table-dark\'>' +
             '<tbody>' +
             innerTableContent +

@@ -2,7 +2,7 @@ export class ObjectAccessRequest {
 
   objectName: string;
   bucketName: string;
-  ownerName: string;
+  ownerId: number;
   userName: string;
   access: string;
 }
