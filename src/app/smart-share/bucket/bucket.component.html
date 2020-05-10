@@ -25,7 +25,8 @@
               &nbsp;
               <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
             </button>
-            <button *ngIf="perspective !== 'admin'" [routerLink]="['/dashboard/explorer',{bucketName: bucket.name}]"
+            <button *ngIf="perspective !== 'admin' && readChecked"
+                    [routerLink]="['/dashboard/explorer',{bucketName: bucket.name}]"
                     color="warn" mat-raised-button>View &nbsp;
               <fa-icon [icon]="['fas', 'eye']" class="pull-right"></fa-icon>
             </button>

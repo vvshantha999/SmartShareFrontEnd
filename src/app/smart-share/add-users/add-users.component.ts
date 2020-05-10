@@ -16,12 +16,6 @@ export class AddUsersComponent implements OnInit {
 
   selectedBucket: string;
   users;
-  //   [
-  //   'Get to work',
-  //   'Pick up groceries',
-  //   'Go home',
-  //   'Fall asleep'
-  // ];
   buckets;
   userManged = [];
   matcardTitle = 'Select Bucket';
@@ -36,11 +30,11 @@ export class AddUsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const user = this.oauth.getUser();
-    this.fileService.getBucketList(user._userName, user._emailAddress).subscribe(value => {
+    const userId = this.oauth.getUserId();
+    this.fileService.getBucketList(userId).subscribe(value => {
       this.buckets = value;
     });
-    console.log(this.buckets);
+
     this.route.url.subscribe((url: UrlSegment[]) => {
       this.selectedBucket = url[0].parameters.bucketName;
     });
@@ -62,7 +56,7 @@ export class AddUsersComponent implements OnInit {
   }
 
   onChange() {
-    console.log(this.selectedBucket);
+
     if (!!this.selectedBucket) {
       this.matcardTitle = 'Bucket :';
     }
@@ -97,7 +91,7 @@ export class AddUsersComponent implements OnInit {
     if (this.userManged.length === 1) {
       const user = this.userManged[0];
       this.adminService.removeUser(new UserBucketMapping(user.userId, user.userName, this.selectedBucket)).subscribe(value => {
-          console.log(value);
+
           if (value) {
             this.toastr.success('Users Deleted Successfully');
             this.userManged = [];
@@ -106,5 +100,9 @@ export class AddUsersComponent implements OnInit {
         },
         error => this.toastr.error('Failed'));
     }
+  }
+
+  getUserName(user) {
+    return user.userName.split('_')[0];
   }
 }

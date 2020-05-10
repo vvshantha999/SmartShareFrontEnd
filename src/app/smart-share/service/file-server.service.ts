@@ -18,16 +18,15 @@ export class FileServerService {
   constructor(private httpService: HttpClient) {
   }
 
-  getBucketList(userName, email) {
+  getBucketList(userId) {
     const getBucketListUrl = 'http://localhost:8081/coreserver/buckets';
     const params = new HttpParams()
-      .set('userName', userName)
-      .set('email', email);
+      .set('userId', userId);
     return this.httpService.get(getBucketListUrl, {params});
   }
 
   createBucket(body): Observable<any> {
-    console.log('Inside createBucket ', body);
+
     const createBucketUrl = 'http://localhost:8081/coreserver/bucket';
     return this.httpService.post<any>(createBucketUrl, body, this.httpOptions)
       .pipe(
@@ -53,7 +52,7 @@ export class FileServerService {
   }
 
   downloadFile(fileName, objectName, bucketName): Subscription {
-    console.log('inside servc');
+
     const downloadFileUrl = 'http://localhost:8081/coreserver/file/download';
     const params = new HttpParams()
       .set('fileName', fileName)
@@ -65,19 +64,19 @@ export class FileServerService {
     return this.httpService.get(downloadFileUrl, {headers, params, responseType: 'blob'})
       .subscribe(
         (response) => {
-          // console.log(resp.headers.get('content-disposition'));
+          //
           FileSaver.saveAs(response, fileName);
         });
   }
 
   downloadFolder(objectsToDownload): Observable<any> {
-    console.log('inside');
+
     const downloadFolderUrl = 'http://localhost:8081/coreserver/folder/download';
     return this.httpService.post<any>(downloadFolderUrl, objectsToDownload, this.httpOptions);
   }
 
   uploadFile(body): Observable<any> {
-    console.log('Inside upload file', body);
+
     const uploadUrl = 'http://localhost:8081/coreserver/object';
     return this.httpService.post<any>(uploadUrl, body, this.httpOptions)
       .pipe(
@@ -88,7 +87,7 @@ export class FileServerService {
   }
 
   deleteFile(objectName, bucketName, ownerId): Observable<any> {
-    console.log('inside');
+
     const deleteFileUrl = 'http://localhost:8081/coreserver/file';
     const params = new HttpParams()
       .set('objectName', objectName)

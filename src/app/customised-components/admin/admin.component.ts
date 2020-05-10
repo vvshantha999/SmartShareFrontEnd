@@ -64,7 +64,7 @@ export class AdminComponent implements OnInit, OnChanges {
     const dataSource = this.addGroups(this.metadata.data.filter(value => value.status === 'In Progress'), this.groupByColumns);
     this.dataSource.data = (dataSource.length === 1) ? [] : dataSource;
     this.totalCount = this.metadata.data.length;
-    console.log(this.dataSource.data);
+
     // tslint:disable-next-line:max-line-length
     this.dataSource.filterPredicate = (this.metadata.type === 'Bucket') ? this.customFilterPredicate.bind(this) : this.customFilterPredicateBucketObject.bind(this);
     this.pendingCount = this.metadata.data.filter(value => value.status === 'In Progress').length;
@@ -87,7 +87,7 @@ export class AdminComponent implements OnInit, OnChanges {
         this.userNameFilter = url[0].parameters.filter;
         this.applyFilter(this.userNameFilter);  // have to change the code with parameter according to retrieved data in below filter
         this.dataSource.data = this.addGroups(this.metadata.data.filter(value => value.symbol === 'Ne'), this.groupByColumns);
-        console.log(this.dataSource.data);
+
       }
     });
   }
@@ -141,7 +141,7 @@ export class AdminComponent implements OnInit, OnChanges {
             result.row = row;
             result[groupByColumns[0]] = row[groupByColumns[0]];
             groupNames.push(row.bucketObjectName);
-            console.log(result);
+
             return result;
           }
         })
@@ -152,7 +152,11 @@ export class AdminComponent implements OnInit, OnChanges {
         groupNames.forEach(groupName => {
           exists.push(value.bucketObjectName.startsWith(groupName));
         });
-        const evaluate = exists.reduce((previousValue, currentValue) => previousValue || currentValue);
+        let evaluate = false;
+
+        if (exists.length !== 0) {
+          evaluate = exists.reduce((previousValue, currentValue) => previousValue || currentValue);
+        }
         if (evaluate === false) {
           const result = new Group();
           result.level = level + 1;
@@ -162,7 +166,7 @@ export class AdminComponent implements OnInit, OnChanges {
         }
       });
       groups = [...new Map(groups.map(item => [item.bucketObjectName, item])).values()];
-      console.log(groups);
+
     } else {
       groups = this.uniqueBy(
         data.map(
@@ -174,19 +178,19 @@ export class AdminComponent implements OnInit, OnChanges {
             for (let i = 0; i <= level; i++) {
               result[groupByColumns[i]] = row[groupByColumns[i]];
             }
-            console.log(result);
+
             return result;
           }
         ),
         JSON.stringify);
     }
-    console.log(groups);
-    console.log(data);
+
+
     const currentColumn = groupByColumns[level];
     let subGroups = [];
     if (this.metadata.type !== 'Bucket') {
       for (let i = 0; i <= groups.length - 1; i++) {
-        console.log(groups[i][currentColumn]);
+
         let rowsInGroup = [];
         if (i + 1 < groups.length) {
           rowsInGroup = data.filter(row => {
@@ -257,7 +261,7 @@ export class AdminComponent implements OnInit, OnChanges {
 
 
   applyFilter(filterValue: string) {
-    console.log(filterValue);
+
     this.dataSourceFilter = filterValue;
     this.selectedRows = [];
     this.selection.clear();
@@ -335,7 +339,7 @@ export class AdminComponent implements OnInit, OnChanges {
   }
 
   selectGroupChildren(event: MatCheckboxChange, group: any) {
-    console.log(group);
+
     const children = this.dataSource.data.filter((value) => !(value instanceof Group) && value.parentId === group.id);
     this.selectedRows.push((this.metadata.type === 'Bucket') ? group as any : group.row as any);
     children.forEach(row => {
@@ -346,7 +350,7 @@ export class AdminComponent implements OnInit, OnChanges {
   }
 
   acceptRequest(row) {
-    console.log(row);
+
     const request = new Request();
     request.type = 'accept';
     request.content = [row];
@@ -372,8 +376,8 @@ export class AdminComponent implements OnInit, OnChanges {
   }
 
   addInSelectedFiles(event, row) {
-    console.log(event);
-    console.log(row);
+
+
     if (event.checked) {
       let exists = false;
       this.selectedRows.forEach(value => {
@@ -382,11 +386,11 @@ export class AdminComponent implements OnInit, OnChanges {
         }
       });
       if (exists === false) {
-        console.log('pushed');
+
         this.selectedRows.push(row);
       }
     } else {
-      console.log('removed');
+
       this.selectedRows = this.selectedRows.filter(value => value.bucketObjectName !== row.bucketObjectName);
     }
   }

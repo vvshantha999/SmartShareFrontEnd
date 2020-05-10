@@ -5,4 +5,5 @@ export class ObjectAccessRequest {
   ownerId: number;
   userName: string;
   access: string;
+  userId: number;
 }

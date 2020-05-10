@@ -16,7 +16,6 @@ export class AuthenticationService {
     observe: 'response'
   };
   private registerUrl = 'http://localhost:8081/administrationserver/register';
-  private isAdmin;
   constructor(private httpService: HttpClient) {
   }
 

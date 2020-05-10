@@ -4,6 +4,7 @@ import {ToastrService} from 'ngx-toastr';
 import {BucketAccessRequest} from '../domain-models/BucketAccessRequest';
 import {Auth0ServiceService} from '../../authentication/auth0/auth0-service.service';
 import {AdminServerService} from '../service/admin-server.service';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -16,7 +17,8 @@ export class BucketComponent implements OnInit, OnChanges {
   constructor(private fileService: FileServerService,
               private toast: ToastrService,
               private auth: Auth0ServiceService,
-              private adminService: AdminServerService) {
+              private adminService: AdminServerService,
+              private router: Router) {
   }
 
   @Input() bucket: any;
@@ -29,18 +31,26 @@ export class BucketComponent implements OnInit, OnChanges {
     this.writeChecked = this.bucket.access.write;
   }
 
+  reloadCurrentRoute() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate([currentUrl]);
+    });
+  }
+
   deleteBucket() {
-    console.log(this.bucket);
+
     this.fileService.deleteBucket(this.bucket.name).subscribe(value => {
-      console.log(value);
+
       if (value) {
         this.toast.success('Bucket Deleted Successfully');
+        this.reloadCurrentRoute();
       }
     });
   }
 
   createReadAccessRequest(access) {
-    console.log(this.readChecked);
+
     if (!this.readChecked) {
       const accessRequest = new BucketAccessRequest();
       accessRequest.bucketName = this.bucket.name;
@@ -76,6 +86,6 @@ export class BucketComponent implements OnInit, OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
+
   }
 }

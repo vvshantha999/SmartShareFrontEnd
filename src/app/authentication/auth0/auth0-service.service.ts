@@ -17,12 +17,15 @@ export class Auth0ServiceService {
   private accessToken;
   private loginChangedSubject = new Subject<boolean>();
   private isAdminChangedSubject = new Subject<boolean>();
+  private isDefaultAdminChangedSubject = new Subject<boolean>();
   loginChanged = this.loginChangedSubject.asObservable();
   private userAssignedSubject = new Subject<User>();
   userAssigned = this.userAssignedSubject.asObservable();
   isAdminAssigned = this.isAdminChangedSubject.asObservable();
+  isDefaultAdminAssigned = this.isDefaultAdminChangedSubject.asObservable();
   private isAdmin: boolean;
   private userId;
+  private defaultAdmin: boolean;
 
   constructor(private authService: AuthenticationService) {
     const auth0Settings = {
@@ -50,18 +53,26 @@ export class Auth0ServiceService {
     this.userAssigned.subscribe(value => {
       this.accessToken = value.access_token;
       this.userModel = new UserModel(value.profile.picture, value.profile.name.split(' ')[0], value.profile.email);
-      this.authService.registerUser(this.userModel).subscribe(registerUserResult => {
-        console.log(registerUserResult);
-        this.isAdminChangedSubject.next(registerUserResult.body.isAdmin);
-        this.isAdmin = registerUserResult.body.isAdmin;
-        this.userId = registerUserResult.body.registeredUser.userId;
-      });
     });
 
   }
 
   login() {
     return this.userManager.signinRedirect();
+  }
+
+  registerUser() {
+    this.authService.registerUser(this.userModel).subscribe(registerUserResult => {
+
+      if (registerUserResult.body.defaultAdmin) {
+        this.defaultAdmin = true;
+        this.isDefaultAdminChangedSubject.next(registerUserResult.body.isAdmin);
+      } else {
+        this.isAdminChangedSubject.next(registerUserResult.body.isAdmin);
+        this.isAdmin = registerUserResult.body.isAdmin;
+      }
+      this.userId = registerUserResult.body.registeredUser.userId;
+    });
   }
 
   isLoggedIn(): Promise<boolean> {
@@ -109,5 +120,9 @@ export class Auth0ServiceService {
 
   getUserId(): number {
     return this.userId;
+  }
+
+  isDefaultAdmin() {
+    return this.defaultAdmin;
   }
 }

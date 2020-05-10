@@ -56,17 +56,15 @@ export class OwnerTreeComponent implements OnChanges {
       const simulation = d3.forceSimulation(nodes)
         .force('link', d3.forceLink(links)
           // .id(d => d.id)
-          .distance(0)
-          .strength(1)
+          .distance(10)
+          .strength(0.8)
         )
-        .force('charge', d3.forceManyBody().strength(-80))
-        .force('x', d3.forceX())
-        .force('y', d3.forceY());
+        .force('charge', d3.forceManyBody().strength(-105))
+        .force('center', d3.forceCenter());
 
       let isDragging = false;
       let previousFill = null;
       let category = null;
-      let previousStroke = null;
 
       // adding tool tip
 
@@ -85,16 +83,7 @@ export class OwnerTreeComponent implements OnChanges {
 
         Tooltip.html(() => {
           let innerTableContent;
-          if (d.children) {
-            innerTableContent =
-              '<tr>' +
-              '<th scope=\'row\'>Folder :</th>' + '<td>' + d.data.name + '</td>' +
-              '</tr>' +
-              '<tr>' +
-              '<th scope=\'row\'>Owner :</th>' + '<td>' + d.data.owner + '</td>' +
-              '</tr>';
-
-          } else {
+          if (d.data.completeName === null) {
             innerTableContent =
               '<tr>' +
               '<th scope=\'row\'>File :</th>' + '<td>' + d.data.name + '</td>' +
@@ -105,6 +94,15 @@ export class OwnerTreeComponent implements OnChanges {
               '<tr>' +
               '<th scope=\'row\'>Access Given :</th>' + '<td>' + d.data.accessInfo + '</td>' +
               '</tr>';
+          } else {
+            innerTableContent =
+              '<tr>' +
+              '<th scope=\'row\'>Folder :</th>' + '<td>' + d.data.name + '</td>' +
+              '</tr>' +
+              '<tr>' +
+              '<th scope=\'row\'>Owner :</th>' + '<td>' + d.data.owner + '</td>' +
+              '</tr>';
+
           }
           return '<div class=\'card bg-dark opacity-1\'>' + '<div class=\'card-body\'>' +
             '<table class=\'table table-striped table-dark\'>' +
@@ -180,22 +178,10 @@ export class OwnerTreeComponent implements OnChanges {
         .join('path');
 
       const node = g.append('g')
-        .attr('stroke', 'red')
         .style('cursor', 'pointer')
         .selectAll('circle')
         .data(nodes)
         .join('circle')
-        .attr('stroke', d => {
-          if (d.children === undefined) {
-            if (d.data.name !== category) {
-              category = d.data.name;
-              previousStroke = '#000000'.replace(/0/g, () => (~~(Math.random() * 16)).toString(16));
-              return previousStroke;
-            }
-            return previousStroke;
-          }
-          return 'red';
-        })
         .attr('fill', d => {
           if (d.children === undefined) {
             if (d.data.name !== category) {
@@ -208,8 +194,9 @@ export class OwnerTreeComponent implements OnChanges {
           }
           return '#fff';
         })
-        .attr('stroke-width', d => d.children ? 1 : 0.5)
-        .attr('r', d => d.children ? 8 : 4)
+        .attr('stroke', d => (d.data.completeName === null) ? 'white' : 'red')
+        .attr('stroke-width', d => (d.data.completeName === null) ? 1 : 2)
+        .attr('r', d => (d.data.completeName === null) ? 6 : 12)
         .on('mouseover', mouseover)
         .on('mouseout', mouseout)
         .call(drag(simulation));

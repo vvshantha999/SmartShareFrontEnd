@@ -40,11 +40,12 @@ export class MenuBarComponent implements OnInit {
         value.profile.email);
     });
     this.fileExplorerScreenChanged.subscribe(value => {
-      console.log('inside');
-      this.fileServerService.getBucketList(this.user._userName, this.user._emailAddress).subscribe(buckets => {
+
+      this.fileServerService.getBucketList(this.auth.getUserId()).subscribe(buckets => {
         this.listOfBuckets = buckets;
       });
     });
+
   }
 
   get isThisBucketScreen() {
@@ -89,8 +90,13 @@ export class MenuBarComponent implements OnInit {
       } else {
         this._isThisFileExplorerScreen = false;
       }
-      (event instanceof NavigationEnd && event.url === '/dashboard/relationships') ?
-        this._isThisRelationsScreen = true : this._isThisRelationsScreen = false;
+      if (event instanceof NavigationEnd && event.url === '/dashboard/relationships') {
+        this.fileExplorerScreenSubject.next(true);
+        this._isThisRelationsScreen = true;
+      } else {
+        this._isThisRelationsScreen = false;
+      }
+
     });
 
   }

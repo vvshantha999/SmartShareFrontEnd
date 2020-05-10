@@ -341,7 +341,7 @@ export class RelationshipComponent implements OnInit {
   }
 
   filterBuckets(selectedBucket: string) {
-    console.log(selectedBucket);
+
     if (selectedBucket === 'Choose Bucket') {
       this.toaster.warning('Please Select Bucket');
     } else {

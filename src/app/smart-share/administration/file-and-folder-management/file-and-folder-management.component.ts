@@ -54,7 +54,7 @@ export class FileAndFolderManagementComponent implements OnInit {
     this.adminService.getBucketObjectAccessRequestsAsOwner(ownerId).subscribe(value => {
       this.metadata = {
         type: 'Bucket Object',
-        displayedColumns: ['select', 'bucketObjectName', 'bucketName', 'ownerName', 'requestType', 'status', 'action'],
+        displayedColumns: ['select', 'bucketObjectName', 'bucketName', 'userName', 'requestType', 'status', 'action'],
         data: value,
         groupByColumns: ['bucketObjectName']
       };
@@ -66,7 +66,7 @@ export class FileAndFolderManagementComponent implements OnInit {
   }
 
   handleRequest(request: Request) {
-    console.log(request);
+
     switch (request.type) {
       case 'accept':
         this.adminService.approveBucketObjectAccessRequest(request.content).subscribe(value => {
@@ -103,9 +103,9 @@ export class FileAndFolderManagementComponent implements OnInit {
 
   changePerspective(event: MatButtonToggleChange) {
     this.perspective = event.value;
-    console.log(this.perspective);
+
     if (this.perspective === 'user') {
-      console.log('inside');
+
       this.fetchBucketObjectAccessRequests(this.oauth.getUserId());
     } else {
       this.fetchBucketObjectAccessRequestsAsOwner(this.oauth.getUserId());

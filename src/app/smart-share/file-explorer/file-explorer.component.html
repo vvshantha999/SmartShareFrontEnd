@@ -4,7 +4,7 @@
       <div class="card">
         <div class="card-body">
           <div class="container-fluid">
-<!--            <ngx-spinner></ngx-spinner>-->
+            <ngx-spinner></ngx-spinner>
             <app-file-tree-list (selectedFileOrFolderEmitter)="assignSelectedFileOrFolder($event)"
                                 [data]="bucketObjects"></app-file-tree-list>
           </div>
@@ -81,14 +81,14 @@
                 <mat-divider></mat-divider>
                 <div class="container-fluid mt-2">
                   <div class="row">
-                    <div class="col-3">
-                      <button (click)="createNewFolder()" class="custom-button create-button" mat-raised-button
+                    <div *ngIf="writeChecked" class="col-3">
+                      <button (click)="openDialog()" class="custom-button create-button" mat-raised-button
                               title="create folder">
                         <fa-icon [icon]="['fas', 'folder-plus']"></fa-icon>
                         create
                       </button>
                     </div>
-                    <div class="col-3">
+                    <div *ngIf="readChecked" class="col-3">
                       <button (click)='downloadFileFolder()' class="custom-button download-button" mat-raised-button
                               title="download file or folder">
                         <small>
@@ -97,14 +97,14 @@
                         </small>
                       </button>
                     </div>
-                    <div class="col-3">
+                    <div *ngIf="writeChecked" class="col-3">
                       <button (click)="openUploadPanel()" class="custom-button upload-button" mat-raised-button
                               title="upload file or folder">
                         <fa-icon [icon]="['fas', 'cloud-upload-alt']" class="icon"></fa-icon>
                         Upload
                       </button>
                     </div>
-                    <div class="col-3">
+                    <div *ngIf="deleteChecked" class="col-3">
                       <button (click)="deleteFileFolder()" class="custom-button delete-button" mat-raised-button
                               title="delete file or folder">
                         <fa-icon [icon]="['fas', 'trash-alt']" class="icon"></fa-icon>

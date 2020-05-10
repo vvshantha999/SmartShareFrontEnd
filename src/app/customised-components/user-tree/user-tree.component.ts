@@ -52,10 +52,10 @@ export class UserTreeComponent implements OnChanges {
       const simulation = d3.forceSimulation(nodes)
         .force('link', d3.forceLink(links)
           // .id(d => d.id)
-            .distance(10)
-            .strength(0.8)
+          .distance(10)
+          .strength(0.8)
         )
-        .force('charge', d3.forceManyBody().strength(-50))
+        .force('charge', d3.forceManyBody().strength(-45))
         .force('center', d3.forceCenter());
 
       let previousColour = null;
@@ -188,16 +188,16 @@ export class UserTreeComponent implements OnChanges {
       const defs = g.append('svg:defs');
       defs.append('svg:pattern')
         .attr('id', 'image')
-        .attr('width', 34)
-        .attr('height', 34)
+        .attr('width', 32)
+        .attr('height', 32)
         .attr('x', -16)
         .attr('y', -16)
         .attr('patternUnits', 'userSpaceOnUse')
         .attr('patternUnits', 'userSpaceOnUse')
         .append('svg:image')
         .attr('xlink:href', 'https://user-images.githubusercontent.com/18228016/68896905-56851200-0724-11ea-8a31-b5723aea30fa.png')
-        .attr('width', 34)
-        .attr('height', 34)
+        .attr('width', 32)
+        .attr('height', 32)
         .attr('x', 0)
         .attr('y', 0);
 
@@ -209,21 +209,10 @@ export class UserTreeComponent implements OnChanges {
         .data(nodes)
         .join('circle')
         .attr('fill', d => {
-
           if (d.depth === 0) {
             return 'url(#image)';
           }
-          if (d.children) {
-            if (1 === d.depth) {
-              // tslint:disable-next-line:no-bitwise
-              previousColour = '#000000'.replace(/0/g, () => (~~(Math.random() * 16)).toString(16));
-              d.data.color = previousColour;
-              return previousColour;
-            } else if (d.depth > 1) {
-              d.data.color = d.parent.data.color;
-              return d.parent.data.color;
-            }
-          } else {
+          if (!d.children && access.indexOf(d.data.name) !== -1) {
             switch (d.data.name) {
               case 'Read':
                 return '#48d146';
@@ -234,11 +223,34 @@ export class UserTreeComponent implements OnChanges {
               // default: return
             }
           }
+          if (1 === d.depth) {
+            // tslint:disable-next-line:no-bitwise
+            previousColour = '#000000'.replace(/0/g, () => (~~(Math.random() * 16)).toString(16));
+            d.data.color = previousColour;
+            return previousColour;
+          } else if (d.depth > 1) {
+            if (!d.children && !d.data.completeName.endsWith('/')) {
+              return 'black';
+            }
+            d.data.color = d.parent.data.color;
+            return d.parent.data.color;
+          }
+
         })
-        .attr('class', (d) => (!d.children && access.indexOf(d.data.name) === -1) ? 'blink' : null)
-        .attr('stroke', d => (d.depth === 0) ? null : (!d.children) ? 'grey' : 'white')
+        .attr('class', (d) => {
+          if (!d.children && access.indexOf(d.data.name) === -1 && !d.data.completeName.endsWith('/')) {
+            return 'blink';
+          }
+        })
+        .attr('stroke', d => {
+          if (d.depth > 0 && !d.children && (access.indexOf(d.data.name) !== -1 || !d.data.completeName.endsWith('/'))) {
+            return 'grey';
+          }
+          return 'white';
+          // (d.depth === 0) ? null : (!d.children) ? 'grey' : 'white'
+        })
         .attr('stroke-width', 2)
-        .attr('r', d => (d.depth === 0) ? 18 : (!d.children) ? 6 : 12)
+        .attr('r', d => (d.depth === 0) ? 16 : (!d.children && access.indexOf(d.data.name) !== -1) ? 6 : 12)
         .on('mouseover', mouseover)
         .on('mouseout', mouseout)
         .each(pulse)

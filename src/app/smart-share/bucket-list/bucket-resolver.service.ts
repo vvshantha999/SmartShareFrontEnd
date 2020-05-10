@@ -13,7 +13,7 @@ export class BucketResolver implements Resolve<any> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
-    const user = this.oauth.getUser();
-    return this.fileService.getBucketList(user._userName, user._emailAddress);
+    const userId = this.oauth.getUserId();
+    return this.fileService.getBucketList(userId);
   }
 }

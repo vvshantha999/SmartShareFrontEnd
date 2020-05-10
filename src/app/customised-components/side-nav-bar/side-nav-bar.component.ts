@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Auth0ServiceService} from '../../authentication/auth0/auth0-service.service';
 import {Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-side-nav-bar',
@@ -12,9 +13,14 @@ export class SideNavBarComponent implements OnInit {
   isLoggedIn = false;
   isAdmin: boolean;
 
-  constructor(private router: Router, private auth: Auth0ServiceService) {
+
+  constructor(private router: Router,
+              private auth: Auth0ServiceService,
+              private toaster: ToastrService
+  ) {
     this.auth.loginChanged.subscribe(value => {
       this.isLoggedIn = value;
+      this.auth.registerUser();
     });
     this.auth.isAdminAssigned.subscribe(value => {
       this.isAdmin = value;
@@ -34,6 +40,9 @@ export class SideNavBarComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAdmin = this.auth.getAdminStatus();
-    console.log(this.isAdmin);
+
+    this.auth.isDefaultAdminAssigned.subscribe(value => {
+      this.toaster.info('Please make yourself Admin !', 'Initial Setup');
+    });
   }
 }

@@ -6,6 +6,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Auth0ServiceService} from '../../authentication/auth0/auth0-service.service';
 import {Bucket} from '../domain-models/bucket';
 import {ToastrService} from 'ngx-toastr';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 
 @Component({
@@ -23,7 +24,8 @@ export class BucketListComponent implements OnInit {
               private fileServerService: FileServerService,
               private oauth: Auth0ServiceService,
               private route: ActivatedRoute,
-              private tostr: ToastrService
+              private tostr: ToastrService,
+              private spinner: NgxSpinnerService
   ) {
     this.buckets = this.filteredBuckets = this.route.snapshot.data.buckets;
   }
@@ -41,13 +43,14 @@ export class BucketListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result.bucketName !== null) {
+        this.spinner.show();
         this.fileServerService.createBucket(new Bucket(result.bucketName)).subscribe(
           createBucketStatus => {
-            console.log(createBucketStatus);
+            this.spinner.hide();
             if (createBucketStatus) {
-              console.log('inside');
-              const user = this.oauth.getUser();
-              this.fileServerService.getBucketList(user._userName, user._emailAddress).subscribe(buckets => {
+
+              const userId = this.oauth.getUserId();
+              this.fileServerService.getBucketList(userId).subscribe(buckets => {
                 this.filteredBuckets = buckets;
               });
             }

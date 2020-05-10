@@ -42,9 +42,9 @@ export class AdministrationComponent implements OnInit {
   //   this.perspective = event.value;
   //   // this.fileAndFolderManagementComponent.perspective = this.perspective;
   //   // FileAndFolderManagementComponent.prototype.perspective = this.perspective;
-  //   // console.log(this.childReference);
+  //   //
   //   // this.childReference.perspective = this.perspective;
-  //   // console.log(FileAndFolderManagementComponent.prototype.perspective);
+  //   //
   // }
   // emitPerspectiveEvent(event) {
   //   event.perspective = this.perspective;

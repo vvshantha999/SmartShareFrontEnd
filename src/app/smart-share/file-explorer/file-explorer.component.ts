@@ -11,6 +11,15 @@ import {DeleteObjectsRequest} from '../domain-models/DeleteObjectsRequest';
 import {ObjectAccessRequest} from '../domain-models/ObjectAccessRequest';
 import {AdminServerService} from '../service/admin-server.service';
 import {ToastrService} from 'ngx-toastr';
+import {MatDialog} from '@angular/material';
+import {CreateBucketDialogComponent} from './create-bucket-dialog/create-bucket-dialog.component';
+import {NgxSpinnerService} from 'ngx-spinner';
+
+
+export interface DialogData {
+  bucketName: string;
+}
+
 
 @Component({
   selector: 'app-file-explorer',
@@ -41,7 +50,9 @@ export class FileExplorerComponent implements OnInit {
   constructor(private route: ActivatedRoute, private fileServerService: FileServerService,
               private oauth: Auth0ServiceService,
               private adminServerService: AdminServerService,
-              private toastr: ToastrService
+              private toastr: ToastrService,
+              public dialog: MatDialog,
+              private spinner: NgxSpinnerService
   ) {
     this.bucketObjects = this.route.snapshot.data.bucketObjects;
   }
@@ -52,15 +63,25 @@ export class FileExplorerComponent implements OnInit {
     });
   }
 
-  filterBuckets(selectedBucket: string) {
-    if (selectedBucket === 'Choose Bucket') {
-      alert('choose userManged name');
-    } else {
-      this.selectedBucket = selectedBucket.toLowerCase();
-      this.fileServerService.getBucketObjects(this.oauth.getUserId(), this.selectedBucket).subscribe(value => {
+  getBucketObjects() {
+    this.fileServerService.getBucketObjects(this.oauth.getUserId(), this.selectedBucket).subscribe(value => {
         this.bucketObjects = value;
         this.displayFileStructureChart();
-      });
+      },
+      error => {
+        if (error.status === 401) {
+          this.toastr.error('Unauthorized !');
+        }
+      }
+    );
+  }
+
+  filterBuckets(selectedBucket: string) {
+    if (selectedBucket === 'Choose Bucket') {
+      alert('choose Bucket name');
+    } else {
+      this.selectedBucket = selectedBucket.toLowerCase();
+      this.getBucketObjects();
     }
   }
 
@@ -74,6 +95,7 @@ export class FileExplorerComponent implements OnInit {
   }
 
 
+
   removeFileFromSelectedFiles(selectedFile) {
     this.filesToBeUploaded = this.filesToBeUploaded.filter((file) => file.name !== selectedFile);
   }
@@ -84,19 +106,21 @@ export class FileExplorerComponent implements OnInit {
   }
 
   onUpload() {
-    console.log(this.filesToBeUploadedWithMetadata);
+
+    this.spinner.show();
     if (this.filesToBeUploadedWithMetadata.length > 0) {
       this.fileServerService.uploadFile(this.filesToBeUploadedWithMetadata).subscribe(uploadStatus => {
-        if (uploadStatus) {
-          this.fileServerService.getBucketObjects(this.oauth.getUser()._userName, this.selectedBucket).subscribe(value => {
-            this.bucketObjects = value;
-            this.displayFileStructureChart();
-          });
-        }
-        this.cancelUploadTask();
-        this.filesToBeUploadedWithMetadata = [];
-        this.filesToBeUploaded = [];
-      });
+          if (uploadStatus) {
+            this.getBucketObjects();
+            this.toastr.success('Uploaded Successfully !', 'Bucket Object');
+          }
+          this.cancelUploadTask();
+          this.filesToBeUploadedWithMetadata = [];
+          this.filesToBeUploaded = [];
+          this.spinner.hide();
+        },
+        error => this.toastr.error('Uploading Failed !', 'Bucket Object')
+      );
     }
   }
 
@@ -107,7 +131,7 @@ export class FileExplorerComponent implements OnInit {
     reader.readAsDataURL(selectedFile);
     reader.onload = () => {
       if (reader.result) {
-        console.log(reader.result);
+
         const selectedFolder = (this.selectedFileOrFolder === '/') ? '' : this.selectedFileOrFolder;
         // tslint:disable-next-line:max-line-length
         dataToBeUploaded = new UploadObject(selectedFolder.trim() + selectedFile.name,
@@ -145,7 +169,7 @@ export class FileExplorerComponent implements OnInit {
         reader.readAsDataURL(file);
         reader.onload = () => {
           if (reader.result) {
-            console.log(reader.result);
+
             // tslint:disable-next-line:max-line-length
             dataToBeUploaded = new UploadObject(selectedFolder.trim() + folderName + '/' + file.name, reader.result.toString().split(',')[1], this.oauth.getUser()._userName, this.oauth.getUserId(), this.selectedBucket);
             this.filesToBeUploadedWithMetadata.push(dataToBeUploaded);
@@ -159,14 +183,20 @@ export class FileExplorerComponent implements OnInit {
   }
 
   assignSelectedFileOrFolder(selectedFileOrFolderEvent) {
-    console.log(selectedFileOrFolderEvent);
+
     this.selectedFileOrFolderNode = selectedFileOrFolderEvent;
     this.selectedFileOrFolder = selectedFileOrFolderEvent.data.completeName;
     this.lastModified = selectedFileOrFolderEvent.data.lastModified;
     this.ownerName = selectedFileOrFolderEvent.data.owner;
-    this.readChecked = selectedFileOrFolderEvent.data.accessInfo.read;
-    this.writeChecked = selectedFileOrFolderEvent.data.accessInfo.write;
-    this.deleteChecked = selectedFileOrFolderEvent.data.accessInfo.delete;
+    if (selectedFileOrFolderEvent.data.accessInfo !== null) {
+      this.readChecked = selectedFileOrFolderEvent.data.accessInfo.read;
+      this.writeChecked = selectedFileOrFolderEvent.data.accessInfo.write;
+      this.deleteChecked = selectedFileOrFolderEvent.data.accessInfo.delete;
+    } else {
+      this.readChecked = false;
+      this.writeChecked = false;
+      this.deleteChecked = false;
+    }
   }
 
   downloadFileFolder() {
@@ -198,66 +228,62 @@ export class FileExplorerComponent implements OnInit {
       });
       deleteObjectsRequest.folderObjects = requests;
       deleteObjectsRequest.bucketName = this.selectedBucket;
-      console.log(deleteObjectsRequest);
+
       this.fileServerService.deleteFolder(deleteObjectsRequest).subscribe(deleteStatus => {
-        if (deleteStatus) {
-          this.fileServerService.getBucketObjects(this.oauth.getUser()._userName, this.selectedBucket).subscribe(value => {
-            this.bucketObjects = value;
-            this.displayFileStructureChart();
-          });
-        }
-      });
+          if (deleteStatus) {
+            this.getBucketObjects();
+            this.toastr.success('Deleted Successfully !', 'Folder');
+          }
+        },
+        error => this.toastr.error('Deletion Failed !', 'Folder'));
     } else {
       this.fileServerService
         .deleteFile(this.selectedFileOrFolder, this.selectedBucket, this.selectedFileOrFolderNode.data.ownerId).subscribe(deleteStatus => {
-        if (deleteStatus) {
-          this.fileServerService.getBucketObjects(this.oauth.getUser()._userName, this.selectedBucket).subscribe(value => {
-            this.bucketObjects = value;
-            this.displayFileStructureChart();
-            this.selectedFileOrFolder = null;
-          });
-        }
-      });
+          if (deleteStatus) {
+            this.getBucketObjects();
+            this.toastr.success('Deleted Successfully !', 'File');
+          }
+          this.selectedFileOrFolder = null;
+        },
+        error => this.toastr.error('Deletion Failed !', 'File'));
     }
   }
-
-  createNewFolder() {
-    this.disableTextBox = false;
-    this.selectedFileOrFolder = null;
-  }
-
   submitNewFolder() {
     // tslint:disable-next-line:max-line-length
-    const dataToBeUploaded: UploadObject = new UploadObject(this.selectedFileOrFolder.trim() + '/', '', this.oauth.getUser()._userName, this.oauth.getUserId(), this.selectedBucket);
+    const dataToBeUploaded: UploadObject = new UploadObject(this.selectedFileOrFolder, '', this.oauth.getUser()._userName, this.oauth.getUserId(), this.selectedBucket);
     this.fileServerService.createNewFolder(dataToBeUploaded).subscribe(createStatus => {
-      if (createStatus) {
-        this.fileServerService.getBucketObjects(this.oauth.getUser()._userName, this.selectedBucket).subscribe(value => {
-          this.bucketObjects = value;
-          this.displayFileStructureChart();
+        if (createStatus) {
+          this.getBucketObjects();
+          this.toastr.success('New Folder Successfully !', 'Folder');
           this.selectedFileOrFolder = null;
           this.disableTextBox = true;
-        });
-      }
-    });
+        }
+      },
+      error => this.toastr.success('New Folder Creation Failed !', 'Folder')
+    );
   }
 
   createAccessRequest(access) {
     const userName = this.oauth.getUser()._userName;
     if (this.selectedFileOrFolderNode.children === undefined) {
-      console.log('inside file');
+
       const objectAccessRequest = new ObjectAccessRequest();
       objectAccessRequest.access = access;
       objectAccessRequest.bucketName = this.selectedBucket;
       objectAccessRequest.objectName = this.selectedFileOrFolderNode.data.completeName;
       objectAccessRequest.ownerId = this.selectedFileOrFolderNode.data.ownerId;
       objectAccessRequest.userName = userName;
+      objectAccessRequest.userId = this.oauth.getUserId();
       this.adminServerService.createAccessRequest([objectAccessRequest]).subscribe(value => {
-        console.log(value);
+
         (value) ? this.toastr.success(access + 'Request created Successfully ', 'Access Request') :
           this.toastr.error(access + 'Request failed !', 'Access Request');
       });
+      this.readChecked = false;
+      this.writeChecked = false;
+      this.deleteChecked = false;
     } else {
-      console.log('inside folder');
+
       const requests = [];
       const objectAccessRequest = new ObjectAccessRequest();
       objectAccessRequest.access = access;
@@ -265,6 +291,7 @@ export class FileExplorerComponent implements OnInit {
       objectAccessRequest.objectName = this.selectedFileOrFolderNode.data.completeName;
       objectAccessRequest.ownerId = this.selectedFileOrFolderNode.data.ownerId;
       objectAccessRequest.userName = userName;
+      objectAccessRequest.userId = this.oauth.getUserId();
       requests.push(objectAccessRequest);
       this.selectedFileOrFolderNode.children.forEach(child => {
         const request = new ObjectAccessRequest();
@@ -273,14 +300,18 @@ export class FileExplorerComponent implements OnInit {
         request.objectName = child.data.completeName;
         request.ownerId = child.data.ownerId;
         request.userName = userName;
+        request.userId = this.oauth.getUserId();
         requests.push(request);
       });
-      console.log(requests);
+
       this.adminServerService.createAccessRequest(requests).subscribe(value => {
-        console.log(value);
+
         (value) ? this.toastr.success(access + 'Request created Successfully ', 'Access Request') :
           this.toastr.error(access + 'Request failed !', 'Access Request');
       });
+      this.readChecked = false;
+      this.writeChecked = false;
+      this.deleteChecked = false;
     }
   }
 
@@ -326,4 +357,19 @@ export class FileExplorerComponent implements OnInit {
     });
   }
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(CreateBucketDialogComponent, {
+      width: '300px',
+      data: {name: this.selectedFileOrFolder}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (this.selectedFileOrFolder === '/') {
+        this.selectedFileOrFolder = '';
+      }
+      this.selectedFileOrFolder = this.selectedFileOrFolder + result + '/';
+
+      this.submitNewFolder();
+    });
+  }
 }

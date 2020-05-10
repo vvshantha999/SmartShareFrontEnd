@@ -29,9 +29,9 @@ export class BucketManagementComponent implements OnInit {
   }
 
   handleRequest(row) {
-    console.log(row);
+
     if (row.type === 'accept') {
-      this.adminService.approveBucketAccessRequestsAdmin(row.content).subscribe(approveStatus => {
+      this.adminService.approveBucketAccessRequestsAdmin(row.content[0]).subscribe(approveStatus => {
           if (approveStatus) {
             this.toast.success('Bucket Access Request Approved Successfully');
             this.fetchBucketAccessRequests();
@@ -41,7 +41,7 @@ export class BucketManagementComponent implements OnInit {
       );
     }
     if (row.type === 'reject') {
-      this.adminService.rejectBucketAccessRequestsAdmin(row.content).subscribe(approveStatus => {
+      this.adminService.rejectBucketAccessRequestsAdmin(row.content[0]).subscribe(approveStatus => {
           if (approveStatus) {
             this.toast.success('Bucket Access Request Rejected Successfully');
             this.fetchBucketAccessRequests();
@@ -51,7 +51,7 @@ export class BucketManagementComponent implements OnInit {
       );
     }
     if (row.type === 'delete') {
-      this.adminService.deleteBucketAccessRequestsAdmin(row.content).subscribe(approveStatus => {
+      this.adminService.deleteBucketAccessRequestsAdmin(row.content[0]).subscribe(approveStatus => {
           if (approveStatus) {
             this.toast.success('Bucket Access Request Deleted Successfully');
             this.fetchBucketAccessRequests();

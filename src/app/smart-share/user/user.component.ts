@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Auth0ServiceService} from '../../authentication/auth0/auth0-service.service';
 import {AdminServerService} from '../service/admin-server.service';
 import {ToastrService} from 'ngx-toastr';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -16,21 +17,34 @@ export class UserComponent implements OnInit {
 
   constructor(private auth0: Auth0ServiceService,
               private adminService: AdminServerService,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              private router: Router) {
   }
 
   ngOnInit() {
     this.currentUser = this.auth0.getUser();
     this.isAdmin = this.auth0.getAdminStatus();
-    console.log(this.isAdmin);
+
+  }
+
+  reloadCurrentRoute() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate([currentUrl]);
+    });
   }
 
   makeAdmin() {
-    console.log(this.currentUser);
-    this.adminService.makeAdmin(this.currentUser).subscribe(value => {
+
+    this.adminService.makeAdmin(this.user.userId).subscribe(value => {
       if (value) {
         this.toastr.success('User made admin Successfully');
+        this.reloadCurrentRoute();
       }
     });
+  }
+
+  getUserName() {
+    return this.user.name.split('_')[0];
   }
 }

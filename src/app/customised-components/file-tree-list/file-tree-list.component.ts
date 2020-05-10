@@ -133,7 +133,7 @@ export class FileTreeListComponent implements OnChanges {
           .attr('fill', (d) => d.children || d._children ? '#e60000' : '#ff4d4d')
           .attr('class', 'fas')
           .attr('font-size', '12px')
-          .text((d) => d.children || d._children ? '\uf07b' : '\uf15b');
+          .text((d) => d.children || d._children ? '\uf07b' : d.data.completeName.endsWith('/') ? '\uf07b' : '\uf15b');
 
         // adding file or folder names
         nodeEnter.append('text')

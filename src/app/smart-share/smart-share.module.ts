@@ -60,6 +60,7 @@ import {BucketObjectResolver} from './file-explorer/bucket-object-resolver.servi
 import {NgxSpinnerModule} from 'ngx-spinner';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AuthGuardService} from '../authentication/auth-guard.service';
+import {CreateBucketDialogComponent} from './file-explorer/create-bucket-dialog/create-bucket-dialog.component';
 
 
 @NgModule({
@@ -74,7 +75,8 @@ import {AuthGuardService} from '../authentication/auth-guard.service';
     BucketManagementComponent,
     FileAndFolderManagementComponent,
     FileExplorerComponent,
-    RelationshipComponent],
+    RelationshipComponent,
+    CreateBucketDialogComponent],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}
   ],
@@ -142,7 +144,7 @@ import {AuthGuardService} from '../authentication/auth-guard.service';
     MatRadioModule,
     MatCheckboxModule
   ],
-  entryComponents: [DialogBoxComponent]
+  entryComponents: [DialogBoxComponent, CreateBucketDialogComponent]
 })
 export class SmartShareModule {
   constructor() {
